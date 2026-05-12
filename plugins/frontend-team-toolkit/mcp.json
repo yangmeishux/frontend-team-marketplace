@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "yapi-devloper-mcp": {
+      "command": "npx",
+      "args": ["-y", "yapi-devloper-mcp@latest", "--stdio"],
+      "env": {
+        "YAPI_BASE_URL": "https://your-yapi-host.example.com",
+        "YAPI_USERNAME": "your-yapi-username",
+        "YAPI_PASSWORD": "your-yapi-password"
+      }
+    },
+    "figma-developer-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "figma-developer-mcp",
+        "--figma-api-key=YOUR_FIGMA_PERSONAL_ACCESS_TOKEN",
+        "--stdio"
+      ]
+    },
+    "lanhu": {
+      "url": "http://127.0.0.1:8000/mcp?role=Developer&name=developer@example.com"
+    }
+  }
+}

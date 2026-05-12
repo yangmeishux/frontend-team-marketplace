@@ -1,0 +1,20 @@
+{
+  "name": "frontend-team-marketplace",
+  "displayName": "Frontend Team Marketplace",
+  "owner": {
+    "name": "Frontend Team",
+    "email": "frontend-team@example.com"
+  },
+  "metadata": {
+    "description": "团队前端工作台：YApi / Figma / 蓝湖 MCP，以及 Vue2→Vue3 与 YApi 对接技能。",
+    "version": "0.1.0",
+    "pluginRoot": "plugins"
+  },
+  "plugins": [
+    {
+      "name": "frontend-team-toolkit",
+      "source": "frontend-team-toolkit",
+      "description": "前端协作：yapi-devloper-mcp、figma-developer-mcp、lanhu MCP；Vue2→Vue3 迁移与 YApi 前端对接技能"
+    }
+  ]
+}
