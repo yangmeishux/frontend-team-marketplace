@@ -1,18 +1,18 @@
 #!/bin/bash
-# Code Verify Skill - 主入口脚本
-# 用法: bash validate.sh --tool "工具名" --code "代码内容" [--lang 语言] [--doc-url URL]
+# Code Verify Skill v2.0 — 全链路锚定验证骨架生成
+# 用法: bash validate.sh --tool "工具名" [--code "代码"] [--code-file path] [--lang 语言] [--doc-url URL] [--ref-url URL] [--output path]
 
 set -e
 
 SKILL_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPORT_TEMPLATE="$SKILL_DIR/templates/report-template.md"
 
-# 解析参数
 TOOL_NAME=""
 CODE_CONTENT=""
 LANG=""
 DOC_URL=""
+REF_URL=""
 OUTPUT=""
+PHASE="双锚验证"
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -41,181 +41,135 @@ while [[ $# -gt 0 ]]; do
       DOC_URL="$2"
       shift 2
       ;;
+    --ref-url)
+      REF_URL="$2"
+      shift 2
+      ;;
+    --phase)
+      PHASE="$2"
+      shift 2
+      ;;
     --output)
       OUTPUT="$2"
       shift 2
       ;;
     --help)
-      echo "Code Verify Skill - 第三方工具代码验证器"
+      echo "Code Verify Skill v2.0 — 先锚定，再迭代"
       echo ""
       echo "用法:"
-      echo "  bash validate.sh --tool \"工具名\" --code \"代码内容\" [--lang 语言] [--doc-url URL] [--output 输出路径]"
+      echo "  bash validate.sh --tool \"工具名\" [选项]"
       echo ""
-      echo "参数:"
-      echo "  --tool       工具名称（必填）"
-      echo "  --code       代码内容（直接传入）"
-      echo "  --code-file  代码文件路径（与 --code 二选一）"
-      echo "  --lang       编程语言（可选，用于语法检查）"
-      echo "  --doc-url    官方文档 URL（可选，已知时提供可加速）"
-      echo "  --output     输出路径（可选，默认输出到终端）"
+      echo "必填:"
+      echo "  --tool       工具名称"
       echo ""
-      echo "示例:"
-      echo '  bash validate.sh --tool "企业微信 JS-SDK" --code "wx.config({...})" --lang javascript'
-      echo '  bash validate.sh --tool "Stripe API" --code-file code.js --lang javascript --output report.md'
+      echo "可选:"
+      echo "  --code         待验证代码/方案（直接传入）"
+      echo "  --code-file    待验证文件路径"
+      echo "  --lang         编程语言（语法检查用）"
+      echo "  --doc-url      官方文档 URL"
+      echo "  --ref-url      参考实现 URL"
+      echo "  --phase        当前阶段：方案锚定|双锚验证|小步验证|联调受阻"
+      echo "  --output       输出路径（默认 stdout）"
+      echo ""
+      echo "哲学: 五阶段（方案→双锚→小步→止损→清单）+ 七维引擎"
       exit 0
       ;;
     *)
       echo "❌ 未知参数: $1"
-      echo "运行 'bash validate.sh --help' 查看帮助"
       exit 1
       ;;
   esac
 done
 
-# 检查必填参数
 if [[ -z "$TOOL_NAME" ]]; then
-  echo "❌ 缺少必填参数: --tool"
-  echo "运行 'bash validate.sh --help' 查看帮助"
+  echo "❌ 缺少 --tool"
   exit 1
 fi
 
-if [[ -z "$CODE_CONTENT" ]]; then
-  echo "❌ 缺少必填参数: --code 或 --code-file"
-  echo "运行 'bash validate.sh --help' 查看帮助"
-  exit 1
-fi
-
-# 输出配置
 if [[ -z "$OUTPUT" ]]; then
   OUTPUT="/dev/stdout"
 fi
 
-# 生成报告
-REPORT_FILE=$(mktemp)
-
-cat > "$REPORT_FILE" << EOF
-# 📋 验证报告：${TOOL_NAME}
-
-**工具**: ${TOOL_NAME}
-**验证时间**: $(date '+%Y-%m-%d %H:%M')
-**编程语言**: ${LANG:-未指定}
-
----
-
-## 📋 待验证代码
+CODE_BLOCK=""
+if [[ -n "$CODE_CONTENT" ]]; then
+  CODE_BLOCK="## 待验证内容
 
 \`\`\`${LANG:-text}
 ${CODE_CONTENT}
-\`\`\`
-
----
-
-## 📋 验证步骤
-
-请按照以下流程执行验证（由 AI Agent 完成）：
-
-### 步骤 1: 搜索官方文档
-- 搜索关键词: \`${TOOL_NAME} official documentation API reference\`
-- 如果提供了 --doc-url: 直接使用 ${DOC_URL}
-
-### 步骤 2: 提取文档关键信息
-- API 参考页 URL
-- 快速开始页 URL
-- 认证说明页 URL
-- 安装/依赖说明 URL
-
-### 步骤 3: 逐项验证（7 个维度）
-
-#### 维度 1: 📄 文档存在性
-- [ ] AI 引用的文档链接是否可访问
-- [ ] 页面标题是否匹配工具名称
-- [ ] 是否为官方文档
-
-#### 维度 2: 🔑 API 签名对比
-- [ ] API 方法名称是否一致
-- [ ] 参数数量和名称是否匹配
-- [ ] 参数类型是否匹配
-- [ ] 返回值处理是否正确
-
-#### 维度 3: 🔐 认证方式
-- [ ] 认证类型是否一致
-- [ ] 参数名称是否正确
-- [ ] 流程步骤是否完整
-
-#### 维度 4: 📦 依赖包检查
-- [ ] 包是否存在
-- [ ] 版本号是否正确
-- [ ] 安装命令是否正确
-
-#### 维度 5: 🏗️ 初始化顺序
-- [ ] 初始化是否在调用之前
-- [ ] 配置项是否完整
-- [ ] 调用顺序是否正确
-
-#### 维度 6: 🔄 版本兼容性
-- [ ] 使用的 API 在当前版本是否可用
-- [ ] 是否使用了已废弃的 API
-- [ ] SDK 版本是否匹配
-
-#### 维度 7: ⚡ 语法检查
-$(if [[ -n "$LANG" ]]; then
-  case "$LANG" in
-    javascript|js)
-      echo "- [ ] 运行: node --check <code>"
-      ;;
-    typescript|ts)
-      echo "- [ ] 运行: npx tsc --noEmit <code>"
-      ;;
-    python|py)
-      echo "- [ ] 运行: python3 -m py_compile <code>"
-      ;;
-    go)
-      echo "- [ ] 运行: go vet <code>"
-      ;;
-    java)
-      echo "- [ ] 运行: javac -d /tmp <code>"
-      ;;
-    *)
-      echo "- [ ] 运行: 对应语言的语法检查器"
-      ;;
-  esac
+\`\`\`"
 else
-  echo "- [ ] 未指定语言，跳过语法检查"
-fi)
+  CODE_BLOCK="## 待验证内容
+
+（未提供 --code / --code-file；若处于阶段 1，请粘贴 AI 方案）"
+fi
+
+REPORT_FILE=$(mktemp)
+
+cat > "$REPORT_FILE" << EOF
+# 📋 锚定验证报告：${TOOL_NAME}
+
+**工具**: ${TOOL_NAME}
+**验证时间**: $(date '+%Y-%m-%d %H:%M')
+**当前阶段**: ${PHASE}
+**编程语言**: ${LANG:-未指定}
+**官方文档**: ${DOC_URL:-待搜索}
+**参考实现**: ${REF_URL:-待搜索}
 
 ---
 
-## 📊 验证结果
+${CODE_BLOCK}
+
+---
+
+## Agent 执行清单（见 SKILL.md）
+
+### 阶段 1 方案锚定
+- [ ] 方案含官方文档链接
+- [ ] AI 已标注不确定部分
+- [ ] 调用顺序与文档章节可对应
+
+### 阶段 2 双锚验证（七维 + 参考实现）
+- [ ] 文档锚：维度 1–6 逐项验证
+- [ ] 维度 7 语法检查${LANG:+（语言: ${LANG}）}
+- [ ] 实现锚：至少 1 份参考实现对比
+
+### 阶段 3 小步验证
+- [ ] MVU 按文档章节顺序拆分
+- [ ] 进度表已填写
+
+### 阶段 4 止损
+- [ ] 时间盒与置信度闸门已评估
+- [ ] ≤4/7 或超时 → 建议换策略
+
+### 阶段 5 经验沉淀
+- [ ] 提示更新 templates/checklist-template.md
+
+---
+
+## 七维结果（待 Agent 填写）
 
 | 维度 | 结果 | 详情 |
 |------|------|------|
-| 📄 文档存在性 | ⏳ 待验证 | - |
-| 🔑 API 签名对比 | ⏳ 待验证 | - |
-| 🔐 认证方式 | ⏳ 待验证 | - |
-| 📦 依赖包检查 | ⏳ 待验证 | - |
-| 🏗️ 初始化顺序 | ⏳ 待验证 | - |
-| 🔄 版本兼容性 | ⏳ 待验证 | - |
-| ⚡ 语法检查 | ⏳ 待验证 | - |
+| 📄 文档存在性 | ⏳ | |
+| 🔑 API 签名 | ⏳ | |
+| 🔐 认证方式 | ⏳ | |
+| 📦 依赖包 | ⏳ | |
+| 🏗️ 初始化顺序 | ⏳ | |
+| 🔄 版本兼容 | ⏳ | |
+| ⚡ 语法检查 | ⏳ | |
+
+**置信度**: 0/7 (0%)
 
 ---
 
-## 📌 结论
-
-**置信度**: 0/7 (0%)  
-**状态**: ⏳ 待验证
-
----
-
-*验证由 Code Verify Skill v1.0.0 生成*
+*骨架由 Code Verify Skill v2.0.0 生成 — 完整模板见 templates/report-template.md*
 EOF
 
-# 输出报告
 if [[ "$OUTPUT" == "/dev/stdout" ]]; then
   cat "$REPORT_FILE"
 else
   cp "$REPORT_FILE" "$OUTPUT"
-  echo "✅ 验证报告已生成: $OUTPUT"
+  echo "✅ 报告骨架已生成: $OUTPUT"
 fi
 
-# 清理
 rm -f "$REPORT_FILE"

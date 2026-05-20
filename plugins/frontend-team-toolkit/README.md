@@ -9,7 +9,7 @@
 | `skills/openspec-contract-authoring` | OpenSpec 四文件契约化（甲）；可选「按契约落地」前 Gate（乙） |
 | `skills/vue2-to-vue3-migration` | 两阶段协议 + 工程就绪；`reference` §1–§12（模板、扫雷、完整校验、坑点）、可选 `MIGRATION_BASELINE` |
 | `skills/yapi-frontend-integration` | 两阶段摘要 + YApi MCP；`reference`（字段映射、TS、排障、安全） |
-| `skills/code-verify` | 第三方工具代码验证：7 维度对照官方文档；`templates/report-template.md`、`validate.sh` |
+| `skills/code-verify` | **先锚定再迭代**：五阶段闸门 + 七维双锚验证；`report-template`、`checklist-template`、`validate.sh` |
 
 技能随本插件版本在本仓库内维护与迭代。
 

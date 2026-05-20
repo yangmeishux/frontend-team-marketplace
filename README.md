@@ -85,9 +85,10 @@ Skills 位于 `plugins/frontend-team-toolkit/skills/<skill-name>/SKILL.md`。Cur
 
 ### `code-verify`
 
-- **用途**：验证 AI 给出的 **第三方工具代码/方案** 是否正确——对照官方文档，在 7 个维度（文档存在性、API 签名、认证、依赖包、初始化顺序、版本兼容、语法检查）逐项核对，输出结构化验证报告与置信度等级。
-- **附带文档**：`templates/report-template.md`（报告模板）、`validate.sh`（验证任务骨架脚本）、`CHANGELOG.md`。
-- **典型触发**：「验证这段第三方代码」「code-verify」「SDK/API 接入对不对」、AI 生成不熟悉的第三方库代码后需交叉验证。
+- **哲学**：**先锚定，再迭代** — AI 辅助第三方开发的全链路防偏方法论（文章/案例仅为举例，非技能边界）。
+- **五阶段**：① 方案锚定 → ② 双锚验证（官方文档 + 参考实现 + 七维引擎）→ ③ 小步 MVU → ④ 止损换策 → ⑤ 检查清单沉淀。
+- **附带文档**：`templates/report-template.md`、`templates/checklist-template.md`、`validate.sh`。
+- **典型触发**：不熟悉 SDK/API、AI 方案/代码可能从第一步就错、防盲目迭代、code-verify。
 
 ---
 
