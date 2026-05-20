@@ -1,8 +1,8 @@
 {
   "name": "frontend-team-toolkit",
   "displayName": "Frontend Team Toolkit",
-  "version": "0.1.5",
-  "description": "团队前端插件：YApi/Figma/蓝湖 MCP；Vue2→Vue3、YApi 对接、OpenSpec 契约化（四文件+闸门）等 Skills。",
+  "version": "0.1.6",
+  "description": "团队前端插件：YApi/Figma/蓝湖 MCP；Vue2→Vue3、YApi 对接、OpenSpec 契约化（四文件+闸门）、第三方代码验证（code-verify）等 Skills。",
   "author": {
     "name": "Frontend Team",
     "email": "frontend-team@example.com"

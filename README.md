@@ -13,7 +13,7 @@ Cursor 插件可以把多种能力打包分发，常见类型如下：
 | 能力 | 说明 | 本 Marketplace 是否包含 |
 |------|------|-------------------------|
 | **MCP**（Model Context Protocol） | 连接外部工具/API（YApi、Figma、蓝湖等），Agent 通过 MCP 提供的 **Tools** 拉数据、执行操作 | **已包含**：`mcp.json` 中声明 3 个 MCP Server |
-| **Skills** | 带 YAML 头信息的 `SKILL.md`，教 Agent **何时、如何用**某套流程（可与 MCP 配合） | **已包含**：3 个技能目录 |
+| **Skills** | 带 YAML 头信息的 `SKILL.md`，教 Agent **何时、如何用**某套流程（可与 MCP 配合） | **已包含**：5 个技能目录 |
 | **Rules**（`.mdc`） | 持久规则：编码规范、项目约定等 | **未包含**（可按需在插件下增加 `rules/`） |
 | **Agents** | 自定义代理人设与任务拆分 | **未包含**（可按需增加 `agents/`） |
 | **Commands** | 可在对话中触发的命令文档 | **未包含** |
@@ -83,6 +83,12 @@ Skills 位于 `plugins/frontend-team-toolkit/skills/<skill-name>/SKILL.md`。Cur
 - **附带文档**：`reference.md`（MCP 与字段说明、axios 映射、**TS/Schema**、排障、快速表、安全；**写回 YApi** 为非默认）。  
 - **典型触发**：「对接接口」「联调」「请求封装」、粘贴 YApi 链接 / `apiId` / 接口名；**未说 YApi** 但需按契约对接后端同样适用。
 
+### `code-verify`
+
+- **用途**：验证 AI 给出的 **第三方工具代码/方案** 是否正确——对照官方文档，在 7 个维度（文档存在性、API 签名、认证、依赖包、初始化顺序、版本兼容、语法检查）逐项核对，输出结构化验证报告与置信度等级。
+- **附带文档**：`templates/report-template.md`（报告模板）、`validate.sh`（验证任务骨架脚本）、`CHANGELOG.md`。
+- **典型触发**：「验证这段第三方代码」「code-verify」「SDK/API 接入对不对」、AI 生成不熟悉的第三方库代码后需交叉验证。
+
 ---
 
 ## 仓库结构
@@ -99,7 +105,9 @@ frontend-team-marketplace/
 │       ├── skills/
 │       │   ├── openspec-contract-authoring/
 │       │   ├── vue2-to-vue3-migration/
-│       │   └── yapi-frontend-integration/
+│       │   ├── yapi-frontend-integration/
+│       │   ├── change-spec-workflow/
+│       │   └── code-verify/
 │       └── README.md             # 插件级说明（密钥与 MCP 细节）
 ├── scripts/
 │   └── validate-template.mjs     # manifest / frontmatter 校验
