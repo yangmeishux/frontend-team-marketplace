@@ -1,0 +1,123 @@
+# pm-md-to-openspec-pipeline · 参考
+
+与 **[SKILL.md](SKILL.md)** 配套：默认落盘路径、Change Spec → OpenSpec 映射、触发示例。
+
+---
+
+## 1. 全流程后的推荐目录树
+
+`<工作区>` 默认为规格与变更的父目录（常见：仓库根，或团队约定的 `docs/requirements/`）。以 **目标仓库已有先例** 为准。
+
+```text
+<工作区>/
+├── specs/<change-id>/
+│   ├── 实操记录.md              # 阶段 A：切片 + 勘探
+│   └── 变更规格-Change-Spec.md  # 阶段 A：Change Spec
+└── openspec/changes/<change-id>/
+    ├── proposal.md              # 若项目需要（可选）
+    ├── design.md                # 阶段 B
+    ├── tasks.md                 # 阶段 B
+    └── specs/<capability>/
+        ├── field-matrix.md      # 阶段 B（最先）
+        └── spec.md              # 阶段 B
+```
+
+若目标仓 **仅** 使用 `openspec/changes/`、不设 `specs/` 平行目录，阶段 A 产物可落在：
+
+```text
+openspec/changes/<change-id>/
+├── 实操记录.md
+├── 变更规格-Change-Spec.md
+├── design.md
+├── tasks.md
+└── specs/<capability>/
+    ├── field-matrix.md
+    └── spec.md
+```
+
+**规则**：不凭空搬迁路径；与仓内已有 `openspec` 变更 **照抄同仓 precedent**。
+
+---
+
+## 2. `change-id` 与 `capability`
+
+| 字段 | 约定 |
+|------|------|
+| **change-id** | kebab-case；可与分支名、Ticket 对齐；未定时 Agent 提议 1 个并标注待确认 |
+| **capability** | 默认 **1 变更 = 1 capability**，目录名可与 `change-id` 相同 |
+| **多 capability** | 同一 `change-id` 下多个 `specs/<capability>/`，各一对 field-matrix + spec；共享或拆分 design/tasks 以团队惯例为准 |
+
+---
+
+## 3. Change Spec → OpenSpec 四文件映射
+
+| Change Spec / 实操记录 | OpenSpec 文件 | 要点 |
+|------------------------|---------------|------|
+| §一 In/Out、验收 | `spec.md` Goals、验收标准 | 不扩 scope |
+| §三 to-be（可验证描述） | `design.md` 策略与组件约束 | 切换/清空/提交/异常 |
+| §六 接口与数据、实操 §五 矩阵草案 | `field-matrix.md` | **字段只进矩阵**；禁止「按图」 |
+| §四 不变量 | `spec.md` + `design.md` 边界 | 带证据或 TBD |
+| §七 风险、§八 对账 | `tasks.md` 实现任务 + Gate | Evidence 命令与 package.json 一致 |
+| 全文 TBD | `spec.md` **Open Questions** | 与 tasks Gate 一致 |
+
+阶段 B **不得脑补** PM MD 未出现且 Change Spec 未列的信息；一律进 Open Questions。
+
+---
+
+## 4. 用户一条消息示例
+
+### 4.1 默认全流程（PM MD → Change Spec → OpenSpec）
+
+```text
+@skills/pm-md-to-openspec-pipeline/SKILL.md
+@docs/prd/feature-x.md
+
+请按 pm-md-to-openspec-pipeline 执行：阶段 A（步骤 1→2→3）→ 阶段 B（四文件）。
+change-id 建议：feature-x-mvp-1
+勘探范围：src/modules/feature-x/
+禁止编造路径；TBD 保留至人工确认。
+```
+
+### 4.2 仅阶段 A（切片 + 勘探 + Change Spec）
+
+```text
+@skills/pm-md-to-openspec-pipeline/SKILL.md
+@docs/prd/feature-x.md
+
+仅阶段 A（change-spec-workflow 步骤 1→2→3），不要写 OpenSpec 四文件。
+```
+
+### 4.3 仅阶段 B（已有 Change Spec）
+
+```text
+@skills/pm-md-to-openspec-pipeline/SKILL.md
+@openspec/changes/feature-x-mvp-1/
+@specs/feature-x-mvp-1/变更规格-Change-Spec.md
+
+仅阶段 B：按 openspec-contract-authoring 输出四文件。capability：feature-x。
+```
+
+将第一行换为 Cursor 中实际 @ 到的技能路径。
+
+---
+
+## 5. 闸门 G 快速核对表
+
+| # | 检查项 |
+|---|--------|
+| G1 | 实操记录 §一 完整 |
+| G2 | Change Spec 八块语义齐全（可 TBD） |
+| G3 | change-id 已确认 |
+| G4 | 用户未要求「仅阶段 A」 |
+| G5 | （建议）Owner 已确认 In/Out，或已有「跳过 Owner」书面记录 |
+
+---
+
+## 6. 与子技能文档索引
+
+| 技能 | 路径 |
+|------|------|
+| 变更规格全流程 | [`../change-spec-workflow/SKILL.md`](../change-spec-workflow/SKILL.md) |
+| 变更规格模板 | [`../change-spec-workflow/reference.md`](../change-spec-workflow/reference.md) |
+| OpenSpec 契约化 | [`../openspec-contract-authoring/SKILL.md`](../openspec-contract-authoring/SKILL.md) |
+| 四文件模板 | [`../openspec-contract-authoring/reference.md`](../openspec-contract-authoring/reference.md) |
