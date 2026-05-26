@@ -75,6 +75,7 @@ openspec/changes/<change-id>/
 请按 pm-md-to-openspec-pipeline 执行：阶段 A（步骤 1→2→3）→ 阶段 B（四文件）。
 change-id 建议：feature-x-mvp-1
 勘探范围：src/modules/feature-x/
+API 文档：@README.md 中的链接 / @docs/api/...
 禁止编造路径；TBD 保留至人工确认。
 ```
 
@@ -105,11 +106,13 @@ change-id 建议：feature-x-mvp-1
 
 | # | 检查项 |
 |---|--------|
-| G1 | 实操记录 §一 完整 |
+| G1 | 实操记录 §一 完整（含范围变更记录） |
 | G2 | Change Spec 八块语义齐全（可 TBD） |
-| G3 | change-id 已确认 |
+| G3 | change-id **已获用户确认**（或用户明确跳过确认） |
 | G4 | 用户未要求「仅阶段 A」 |
 | G5 | （建议）Owner 已确认 In/Out，或已有「跳过 Owner」书面记录 |
+| G6 | 步骤 2 已输出 **易混淆模块对照表** |
+| G7 | Greenfield 场景已启用 **Greenfield 模式** / 常规场景闸门按代码证据判定 |
 
 ---
 
@@ -121,3 +124,27 @@ change-id 建议：feature-x-mvp-1
 | 变更规格模板 | [`../change-spec-workflow/reference.md`](../change-spec-workflow/reference.md) |
 | OpenSpec 契约化 | [`../openspec-contract-authoring/SKILL.md`](../openspec-contract-authoring/SKILL.md) |
 | 四文件模板 | [`../openspec-contract-authoring/reference.md`](../openspec-contract-authoring/reference.md) |
+
+---
+
+## 7. 安装与可发现性检查清单
+
+若 `@pm-md-to-openspec-pipeline` 未出现在 Cursor Agent 自动技能列表中：
+
+1. **确认 local plugin 已安装**：Cursor Settings → Features → Local Plugins → 检查 `frontend-team-toolkit` 路径
+2. **Reload Cursor**：`Cmd+Shift+P` → `Developer: Reload Window`
+3. **Rules 面板验证**：打开 Rules 面板，搜索 `pm-md-to-openspec-pipeline` / `change-spec-workflow` 是否出现
+4. **Fallback**：若仍未加载，Agent 手动 `Read` 绝对路径：
+   ```
+   Read <repo>/plugins/frontend-team-toolkit/skills/pm-md-to-openspec-pipeline/SKILL.md
+   ```
+5. **`.cursor-plugin/marketplace.json`** 中 `skills` 字段须列出子技能路径
+
+---
+
+## 8. 技能执行反馈归档
+
+优化技能后，执行反馈可归档至以下路径之一（以团队约定为准）：
+
+- `specs/<change-id>/skill-execution-feedback.md`（跟业务 specs 同级）
+- `docs/skill-retro/<change-id>.md`（团队集中反馈目录）

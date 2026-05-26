@@ -17,6 +17,16 @@ disable-model-invocation: true
 4. **缺 PM MD / 规格根目录 / 可读仓库** → 只输出 **待补充清单**，不虚构正文。  
 5. 落盘路径与示例见 **[reference.md](reference.md)**。
 
+### 阶段 A/B 产出与用户口令
+
+| 阶段 | 产出 | 用户口令示例 |
+|------|------|-------------|
+| **A** | 实操记录（切片+勘探+易混淆模块表）+ Change Spec（八块） | `仅阶段 A` / `只切片` / `先出 Change Spec` |
+| **B** | OpenSpec 四文件（field-matrix / design / spec / tasks） | `仅阶段 B` / `写契约` / `出 OpenSpec` |
+| **A→B 全流程** | 以上全部 | `全流程` / `PM 需求转 OpenSpec`（默认） |
+
+> **用户 @ 编排技能 = 人工触发，Agent 仍须 Read 子技能全文**（子技能 `disable-model-invocation: true` 不影响编排技能的手动触发链）。
+
 ---
 
 ## 技能边界
@@ -43,11 +53,23 @@ disable-model-invocation: true
 1. **PM 需求 MD**（`@docs/prd/…` 或用户给定路径）；或  
 2. **已有规格根目录**（`openspec/changes/<id>/`、`proposal`/`design`/`tasks` 等以仓库实际为准）。
 
+**PRD 在工作区外**（如 `@/Users/.../Downloads/...`）：
+- 材料**可读**但无法 `@` 进 repo，落盘 specs 与 PRD 源文件分离
+- 步骤 1 开头输出：「⚠️ PRD 在工作区外，建议复制到 `docs/prd/<文件名>.md` 以便 `@` 引用」
+- 继续执行但标记此风险为 TBD
+
 另须（缺则列入待补充清单，**可**在阶段 A 步骤 1 中由 Agent 提议默认值并标注「待确认」）：
 
-- **`change-id`**：OpenSpec 变更目录名（kebab-case）；未给则步骤 1 末尾 **提议 1 个** 并等用户确认后再落盘阶段 B。  
+- **`change-id`**：OpenSpec 变更目录名（kebab-case）；未给则步骤 1 末尾 **提议 1 个** 并 **强制停顿等用户确认** 后再落盘阶段 B。  
 - **勘探范围**（大仓/monorepo）：模块名或路径前缀；未给则步骤 2 声明「外围 TBD」。  
 - **目标仓库 `openspec` 布局**：以该仓已有 `openspec/` + CONTRIBUTING 为准（见 [reference.md §2](reference.md)）。
+- **API 文档来源**（见下方 API 联动）：未给则接口章全 TBD。
+
+**API 文档联动**（步骤 2 checklist 新增）：
+1. `Read` 仓库 **README.md**，检索是否含 API 文档链接
+2. 若 README 有 API 文档 URL → 访问并检索本期相关接口（如 `/crm/todo/...`）
+3. 若仓库已集成 `yapi-frontend-integration` 技能 → 可 `@` 该子流程获取接口定义
+4. 无 API 来源时，接口章全标 **TBD**，并在实操记录中注明「需 @ API 文档 URL」
 
 **工具不可读仓库**：说明限制，列需用户粘贴的路径/片段；**停止**编造文件内容。
 
@@ -71,9 +93,18 @@ disable-model-invocation: true
 
 | 步骤 | 产出（默认路径，见 reference.md） |
 |------|-----------------------------------|
-| 1 切片 | `<工作区>/specs/<change-id>/实操记录.md` · §一 |
-| 2 勘探 | 同上 · §二～§六 |
+| 1 切片 | `<工作区>/specs/<change-id>/实操记录.md` · §一（含范围变更记录） |
+| 2 勘探 | 同上 · §二～§六 + **易混淆模块对照表** |
 | 3 Change Spec | `<工作区>/specs/<change-id>/变更规格-Change-Spec.md` |
+
+**步骤 2 强制输出 — 易混淆模块对照表**（防业务同名模块误导）：
+
+| PRD 中名称 | 代码中候选模块 | 是否本期 | 备注 |
+|------------|----------------|----------|------|
+| | | ✅ / ❌ | |
+
+- 搜索 PRD 关键词时，**所有命中但不出期的模块**必须列入此表并标 ❌
+- 例：PRD 写「T+0热数据」→ 代码有 `hot-data` 模块；写「待办」→ 代码有 `task-manage` — 均须显式标注是否本期
 
 **阶段 A 内禁止**：写 OpenSpec 四文件（`openspec/changes/.../field-matrix.md` 等）；矩阵细节可记在实操记录 §五，**完整契约留阶段 B**。
 
@@ -121,6 +152,7 @@ disable-model-invocation: true
 | **仅阶段 A** / 「只切片勘探 Change Spec」 | 只跑 change-spec-workflow；**不**写 OpenSpec 四文件 |
 | **仅阶段 B** | 须已有 Change Spec + 实操记录；跳过 1→2→3，直接四文件；缺材料则待补充清单 |
 | **仅步骤 N** | 委托 change-spec-workflow 子步骤规则（N∈{1,2,3,4}）；**不**自动进入阶段 B |
+| **仅后台 / CRM-only** | 裁剪模式：跳过企微/OpenSpec 章节的一页 checklist；接口章全 TBD（等 API 来源） |
 
 用户指令矛盾时 **停下**问清；未答复前按 **较窄** 范围（通常「仅阶段 A」或「仅步骤 N」）。
 
@@ -147,6 +179,12 @@ disable-model-invocation: true
 - [ ] spec / matrix 是否 **无「按图一致」** 作为唯一依据？  
 - [ ] Change Spec 与 OpenSpec **TBD / Open Questions** 是否一致、未静默删除？  
 - [ ] **§七 收尾三节**是否齐全？
+- [ ] 步骤 1 后是否 **停顿等 change-id 确认**？
+- [ ] PRD 在工作区外是否已 **提示复制到 `docs/prd/`**？
+- [ ] 步骤 2 是否输出 **易混淆模块对照表**？
+- [ ] 范围变更（用户收窄/扩大）是否已记录 **范围变更记录**？
+- [ ] 是否检索了 **README API 链接** / API 文档来源？
+- [ ] Greenfield 场景是否启用了 **Greenfield 模式**（as-is 引用模式库）？
 
 ---
 
