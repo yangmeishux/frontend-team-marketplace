@@ -36,9 +36,9 @@ disable-model-invocation: true
 
 **Greenfield as-is 示例**：
 ```markdown
-- 参考 `src/modules/task-manage/` 列表页模式（分页+筛选+操作列），约 L1–120
-- 参考 `src/modules/hot-data/` 配置导出模式，约 L45–80
-- 新建路径草案：`src/modules/crm-todo/`（列表 + 状态切换 + 批量操作）
+- 参考 `src/modules/<同类模块>/` 列表页模式（分页+筛选+操作列），约 L1–120
+- 参考 `src/modules/<已有模块>/` 配置导出模式，约 L45–80
+- 新建路径草案：`src/modules/<新模块>/`（列表 + 状态切换 + 批量操作）
 ```
 
 ## 与其它技能的分工（避免抢活）
@@ -119,7 +119,7 @@ disable-model-invocation: true
 | | | | | |
 ```
 
-- 用户收窄范围（如「本期只做 CRM，企微待定」）时，**立即**在实操记录中更新 In/Out 并记录变更原因
+- 用户收窄范围（如「本期只做模块 A，模块 B 待定」）时，**立即**在实操记录中更新 In/Out 并记录变更原因
 - 范围变更后，步骤 2 勘探范围同步收窄
 
 **change-id 确认停顿**（步骤 1 产出后 **强制停顿**）：

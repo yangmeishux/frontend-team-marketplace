@@ -67,7 +67,7 @@ disable-model-invocation: true
 
 **API 文档联动**（步骤 2 checklist 新增）：
 1. `Read` 仓库 **README.md**，检索是否含 API 文档链接
-2. 若 README 有 API 文档 URL → 访问并检索本期相关接口（如 `/crm/todo/...`）
+2. 若 README 有 API 文档 URL → 访问并检索本期相关接口（如 `/<module>/<resource>/...`）
 3. 若仓库已集成 `yapi-frontend-integration` 技能 → 可 `@` 该子流程获取接口定义
 4. 无 API 来源时，接口章全标 **TBD**，并在实操记录中注明「需 @ API 文档 URL」
 
@@ -104,7 +104,7 @@ disable-model-invocation: true
 | | | ✅ / ❌ | |
 
 - 搜索 PRD 关键词时，**所有命中但不出期的模块**必须列入此表并标 ❌
-- 例：PRD 写「T+0热数据」→ 代码有 `hot-data` 模块；写「待办」→ 代码有 `task-manage` — 均须显式标注是否本期
+- 例：PRD 写「模块 X」→ 代码有 `module-x` 目录；写「功能 Y」→ 代码有 `feature-y` — 均须显式标注是否本期
 
 **阶段 A 内禁止**：写 OpenSpec 四文件（`openspec/changes/.../field-matrix.md` 等）；矩阵细节可记在实操记录 §五，**完整契约留阶段 B**。
 
@@ -152,7 +152,7 @@ disable-model-invocation: true
 | **仅阶段 A** / 「只切片勘探 Change Spec」 | 只跑 change-spec-workflow；**不**写 OpenSpec 四文件 |
 | **仅阶段 B** | 须已有 Change Spec + 实操记录；跳过 1→2→3，直接四文件；缺材料则待补充清单 |
 | **仅步骤 N** | 委托 change-spec-workflow 子步骤规则（N∈{1,2,3,4}）；**不**自动进入阶段 B |
-| **仅后台 / CRM-only** | 裁剪模式：跳过企微/OpenSpec 章节的一页 checklist；接口章全 TBD（等 API 来源） |
+| **裁剪模式** / 「仅核心模块」 | 跳过非核心章节的一页 checklist；接口章全 TBD（等 API 来源） |
 
 用户指令矛盾时 **停下**问清；未答复前按 **较窄** 范围（通常「仅阶段 A」或「仅步骤 N」）。
 
