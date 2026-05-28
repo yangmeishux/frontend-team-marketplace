@@ -98,6 +98,32 @@ API 文档：@README.md 中的链接 / @docs/api/...
 仅阶段 B：按 openspec-contract-authoring 输出四文件。capability：feature-x。
 ```
 
+### 4.4 Reconcile 模式（按 vN 重审）
+
+```text
+@skills/pm-md-to-openspec-pipeline/SKILL.md
+@docs/prd/feature-x-vN.md
+@specs/feature-x-mvp-1/
+@openspec/changes/feature-x-mvp-1/
+
+按 pm-md-to-openspec-pipeline 启用 Reconcile 编排（基准源文档 vN）：
+- R0~R5：阶段 A 对齐分析 + 实操记录 / Change Spec 同步 + 阶段 B 四文件齐刷
+- R6 暂不动代码（待我书面授权）
+- 收尾标注"基准源文档版本：vN"
+```
+
+### 4.5 局部刷新（仅刷某契约文件）
+
+```text
+@skills/pm-md-to-openspec-pipeline/SKILL.md
+@openspec/changes/feature-x-mvp-1/specs/feature-x/field-matrix.md
+
+仅刷新 field-matrix（启用"局部刷新护栏"）：
+- 列出受牵连的 design / spec / tasks 段落
+- 输出"未同步文件清单 + 漂移风险声明"
+- 不要齐刷其它文件，等我确认
+```
+
 将第一行换为 Cursor 中实际 @ 到的技能路径。
 
 ---
@@ -111,8 +137,35 @@ API 文档：@README.md 中的链接 / @docs/api/...
 | G3 | change-id **已获用户确认**（或用户明确跳过确认） |
 | G4 | 用户未要求「仅阶段 A」 |
 | G5 | （建议）Owner 已确认 In/Out，或已有「跳过 Owner」书面记录 |
-| G6 | 步骤 2 已输出 **易混淆模块对照表** |
+| G6 | 步骤 2 已输出 **易混淆模块对照表** + **跨端/跨角色/跨对象归属表** + **新旧轨道对照表** |
 | G7 | Greenfield 场景已启用 **Greenfield 模式** / 常规场景闸门按代码证据判定 |
+| G8 | 源文档若在工作区外，已提示复制入库、并将"未入库"登记为 TBD |
+| G9 | **双根目录**（specs/ ↔ openspec/changes/）基准源文档版本号一致、无漂移 |
+
+---
+
+## 7. Reconcile 闸门 R7 快速核对表（按 vN 重审 / 全链同步后）
+
+| # | 检查项 |
+|---|--------|
+| R7-1 | `<vN>-对齐分析.md` 三栏（应剔除 / 应新增 / 仍保留）已逐项 reconcile 到对应产物路径 |
+| R7-2 | 实操记录、Change Spec、四文件契约**头部**均声明 `基准源文档版本：vN` |
+| R7-3 | 四文件契约**互不残留** vN-1 误加项；保留的兼容字段已标"旧轨静默兼容" |
+| R7-4 | `tasks.md` Gate 与 `spec.md` Open Questions 已同步 vN 增删 |
+| R7-5 | 若 R6 改了代码：实操记录步骤 4 差异表已列、用户已书面授权 |
+| R7-6 | 收尾 §七 首行已标注 `基准源文档版本：vN` + reconcile 日期 |
+
+---
+
+## 8. 局部刷新护栏快速核对表
+
+| # | 检查项 |
+|---|--------|
+| L1 | 已输出"本次仅刷新 ＜文件＞，未同步文件清单"表，并征得用户"暂不同步"确认 |
+| L2 | 局部刷新输出含「漂移风险声明」段，明确"四文件 Gate 未闭合，禁止宣称定稿" |
+| L3 | 未悄悄勾选 Gate / Reconcile R7 |
+| L4 | 若变更触及不变量 / 验收 / 接口契约 / Open Questions，已**主动建议**齐刷 |
+| L5 | 收尾 §七 第二节合并"未同步文件清单"并标"漂移风险" |
 
 ---
 
