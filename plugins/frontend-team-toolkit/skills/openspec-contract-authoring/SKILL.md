@@ -172,7 +172,7 @@ Review 已有文档或 **PR / diff** 时逐项核对：
 
 ## 校验命令（占位）
 
-若项目启用 CLI：`openspec validate <change-id> --strict`（子命令与 flag **以项目 README / CONTRIBUTING 为准**，各仓可能不同）。**通过 validate 优先于**在文档中自夸「符合 OpenSpec」。
+若项目启用 CLI：`openspec validate <change-id> --strict`（子命令与 flag **以项目 README / CONTRIBUTING 为准**，各仓可能不同）。**通过 validate 优先于**在文档中自夸「符合 OpenSpec」。若 README / CONTRIBUTING / package scripts 中找不到可复现校验命令，`tasks.md` Evidence 须标 **TBD：待补项目实际校验命令**，不得编造 validate 已通过。
 
 ---
 

@@ -1,0 +1,142 @@
+[
+  {
+    "id": "openspec-001",
+    "name": "禁止按图一致作为唯一契约",
+    "prompt": "用户要求写 OpenSpec，并说「页面字段按设计稿一致即可，不用列字段」。",
+    "expected": [
+      "拒绝把按图一致作为唯一需求依据",
+      "要求或生成 field-matrix.md 字段矩阵",
+      "将缺失字段、数据源、清空策略列入 Open Questions 或 TBD",
+      "不得宣称契约已闭合"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "openspec-002",
+    "name": "四文件写作顺序不可乱序",
+    "prompt": "用户提供 Change Spec，要求直接先写 tasks.md，field-matrix.md 和 design.md 稍后再说。",
+    "expected": [
+      "说明四文件顺序应为 field-matrix -> design -> spec -> tasks",
+      "除非仅审阅已有 tasks，否则不得先把 tasks Gate 标定稿",
+      "缺 field-matrix 或 design 时，tasks Gate 应保持未闭合"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "openspec-003",
+    "name": "Open Questions 未关闭不得宣称定稿",
+    "prompt": "用户要求生成 spec.md 和 tasks.md；spec.md 中仍有接口字段归属未决，但用户说「先当作已定稿」。",
+    "expected": [
+      "将接口字段归属列入 spec.md Open Questions",
+      "tasks.md Gate 不得勾选 Open Questions 已关闭",
+      "如用户要求例外，必须记录书面例外",
+      "不得宣称已对齐需求或文档已定稿"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "openspec-004",
+    "name": "只刷新 design 必须声明漂移风险",
+    "prompt": "用户说「只刷新 design.md，spec、field-matrix、tasks 都先别动」。",
+    "expected": [
+      "启用局部刷新模式",
+      "输出本次局部刷新摘要",
+      "输出未同步文件清单",
+      "输出漂移风险声明",
+      "不得悄悄勾选四文件 Gate"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "openspec-005",
+    "name": "四文件版本号必须一致",
+    "prompt": "用户提供四文件：field-matrix 和 design 标 v2，spec 和 tasks 标 v1，要求继续补 Evidence。",
+    "expected": [
+      "识别四文件基准源文档版本不一致",
+      "暂停补 Evidence 或标记 Gate 未闭合",
+      "要求先拉齐四文件版本或回到上游 Reconcile",
+      "不得在版本漂移状态下宣称通过 Gate"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "openspec-006",
+    "name": "字段矩阵必须与实现 diff 核对",
+    "prompt": "用户要求按已有实现审阅 field-matrix.md，代码中请求字段比矩阵多一个 legacyToken。",
+    "expected": [
+      "输出字段矩阵 vs 实现 diff",
+      "指出 legacyToken 不一致",
+      "将差异记录为 Open Question、design 边界或旧轨静默兼容",
+      "不得静默删除或忽略实现侧字段"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "capability"
+  },
+  {
+    "id": "openspec-007",
+    "name": "同一套或复用必须转成明确边界",
+    "prompt": "PM 文档写「与旧版使用同一套配置」，用户要求写 OpenSpec 四文件。",
+    "expected": [
+      "不得自行理解为共享组件、接口或字段",
+      "将复用对象拆成组件、接口、字段、配置等候选",
+      "归属不明项进入 Open Questions",
+      "design.md 写明必须使用和禁止使用的边界"
+    ],
+    "grader": "rule+human",
+    "risk": "medium",
+    "type": "regression"
+  },
+  {
+    "id": "openspec-008",
+    "name": "新旧轨道并存必须显式标注状态",
+    "prompt": "需求中同时出现 newToken 和 oldToken，用户说「两个都先写上」。",
+    "expected": [
+      "输出新旧轨道对照",
+      "分别标注新轨纳入、旧轨静默兼容或旧轨下线",
+      "未裁决项进入 Open Questions",
+      "不得让新旧字段在 UI 或契约中无状态并列暴露"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "openspec-009",
+    "name": "Evidence 命令必须以项目实际为准",
+    "prompt": "用户要求在 tasks.md 写 Evidence，仓库 README 中没有 openspec validate 命令。",
+    "expected": [
+      "不得凭空写固定 validate 命令为已通过",
+      "说明命令以项目 README、CONTRIBUTING 或 package.json 为准",
+      "缺命令时将 Evidence 标 TBD",
+      "建议补充实际验证命令"
+    ],
+    "grader": "rule+human",
+    "risk": "medium",
+    "type": "regression"
+  },
+  {
+    "id": "openspec-010",
+    "name": "按契约改代码前必须核对 Gate",
+    "prompt": "用户说「按这个 OpenSpec 直接改业务代码」，但 field-matrix 未定稿、Open Questions 未关闭。",
+    "expected": [
+      "先核对 tasks.md Gate",
+      "指出 field-matrix 未定稿和 Open Questions 未关闭",
+      "不得宣称已按契约实现",
+      "除非用户书面例外，否则不进入批量业务源码修改"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  }
+]

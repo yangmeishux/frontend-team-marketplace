@@ -1,0 +1,140 @@
+[
+  {
+    "id": "pipeline-001",
+    "name": "全流程必须先读两个子技能",
+    "prompt": "用户 @ pm-md-to-openspec-pipeline、PM 需求 MD 和目标仓库，要求执行 PM 需求转 OpenSpec 全流程。",
+    "expected": [
+      "阶段 A 前声明已读取 change-spec-workflow 全文",
+      "阶段 B 前声明已读取 openspec-contract-authoring 全文",
+      "按阶段 A -> 闸门 G -> 阶段 B 顺序执行",
+      "不得用编排技能正文替代子技能细则"
+    ],
+    "grader": "trajectory+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "pipeline-002",
+    "name": "缺 PM MD 和规格根目录时只列待补充清单",
+    "prompt": "用户只说「用 pm-md-to-openspec-pipeline 帮我转 OpenSpec」，但没有 @ PM MD、没有规格根目录、没有仓库路径。",
+    "expected": [
+      "仅输出待补充清单",
+      "清单至少包含 PM 需求 MD 或已有规格根目录、change-id、目标仓库或可读范围",
+      "不得编造实操记录、Change Spec 或 OpenSpec 四文件正文"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "pipeline-003",
+    "name": "仅阶段 A 不得写 OpenSpec 四文件",
+    "prompt": "用户 @ PM MD 和 pm-md-to-openspec-pipeline，明确说「仅阶段 A，先出 Change Spec，不要写 OpenSpec」。",
+    "expected": [
+      "只执行 change-spec-workflow 步骤 1->2->3",
+      "不得新建或覆盖 openspec/changes 下 field-matrix、design、spec、tasks",
+      "收尾建议下一步可以在闸门满足后进入阶段 B"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "pipeline-004",
+    "name": "仅阶段 B 缺上游材料时必须停止",
+    "prompt": "用户说「仅阶段 B，直接写四文件」，但没有提供 Change Spec、实操记录或已有 openspec change 目录。",
+    "expected": [
+      "输出缺失材料清单",
+      "说明至少需要 Change Spec 和实操记录或等价规格材料",
+      "不得跳过上游材料直接生成四文件"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "pipeline-005",
+    "name": "阶段 A 闸门未过不得进入阶段 B",
+    "prompt": "用户要求全流程；阶段 A 的 Change Spec 八块语义不齐，change-id 也未确认，但用户催促「先把四文件也写了」。",
+    "expected": [
+      "停在阶段 A",
+      "列出闸门 G 未满足项",
+      "建议补齐证据或确认 change-id 后再跑阶段 B",
+      "不得宣称 OpenSpec 四文件已定稿"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "pipeline-006",
+    "name": "源文档 vN 重审必须走 Reconcile 编排",
+    "prompt": "用户提供源文档 v2，说「按 v2 重审，剔除 v1 曾误加的内容，不要从零重跑」。",
+    "expected": [
+      "启用 Reconcile 编排",
+      "先产出或要求产出 v2 对齐分析",
+      "按 R1->R5/R7 同步阶段 A 与阶段 B",
+      "不得从零重跑全部步骤",
+      "不得残留 v1 误加项"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "pipeline-007",
+    "name": "只刷 field-matrix 必须输出未同步文件清单",
+    "prompt": "用户说「只刷新 field-matrix.md，其他文件先别动」。",
+    "expected": [
+      "启用局部刷新护栏",
+      "刷新前输出受牵连兄弟文件",
+      "输出未同步文件清单和漂移风险声明",
+      "询问是否一并刷新；若用户明确暂不同步才继续",
+      "不得宣称四文件 Gate 或 Reconcile R7 已闭合"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "pipeline-008",
+    "name": "双根目录版本漂移必须先拉齐",
+    "prompt": "用户已有 specs/<change-id>/ 基于 v2，但 openspec/changes/<change-id>/ 四文件仍标 v1，要求继续写阶段 B。",
+    "expected": [
+      "识别 specs 与 openspec/changes 双根目录版本不一致",
+      "禁止在漂移状态继续刷新阶段 B",
+      "要求或执行 Reconcile R1->R5 拉齐版本标识",
+      "收尾 TBD 中列出漂移项"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "pipeline-009",
+    "name": "工作区外 PRD 必须登记未入库风险",
+    "prompt": "用户提供 /Users/nathan/Downloads/foo-v3.md 作为 PM 需求，并要求全流程落盘。",
+    "expected": [
+      "说明 PRD 在工作区外，建议复制到仓库 docs/prd 或规格目录",
+      "可继续执行但将源文档未入库登记为 TBD",
+      "除非有书面例外，不得宣称已按 v3 定稿"
+    ],
+    "grader": "rule+human",
+    "risk": "medium",
+    "type": "regression"
+  },
+  {
+    "id": "pipeline-010",
+    "name": "收尾必须包含三节",
+    "prompt": "用户要求执行 PM MD 到 OpenSpec 全流程，Agent 准备结束本轮。",
+    "expected": [
+      "收尾包含本轮写入或修改的路径",
+      "收尾包含仍为 TBD",
+      "收尾包含建议下一步",
+      "若是 Reconcile 或局部刷新，首行标注基准源文档版本和 reconcile 日期"
+    ],
+    "grader": "rule+human",
+    "risk": "medium",
+    "type": "regression"
+  }
+]

@@ -1,0 +1,12 @@
+eval_id	pass	date	version	eval_mode	severity	reviewer	notes
+openspec-001	1	2026-05-28	baseline	dry_run	high	gpt-5.5	SKILL 明确禁止按图代契、要求 field-matrix、Open Questions 硬闸门且不得宣称闭合。
+openspec-002	1	2026-05-28	baseline	dry_run	high	gpt-5.5	SKILL 明确规定写作顺序 field-matrix -> design -> spec -> tasks，Gate 未满足前不得定稿。
+openspec-003	1	2026-05-28	baseline	dry_run	high	gpt-5.5	SKILL 明确要求 Open Questions 未关闭或未记录例外前禁止宣称已对齐或定稿。
+openspec-004	1	2026-05-28	baseline	dry_run	high	gpt-5.5	SKILL 明确覆盖局部刷新模式、未同步文件清单、漂移风险声明和禁止悄悄勾 Gate。
+openspec-005	1	2026-05-28	baseline	dry_run	high	gpt-5.5	SKILL 明确要求四文件基准源版本一致，发现漂移暂停并回到上游拉齐。
+openspec-006	1	2026-05-28	baseline	dry_run	high	gpt-5.5	SKILL 明确要求字段矩阵 vs 实现 diff，不一致记录为 Open Question 或 design 边界，旧 token 须显式状态。
+openspec-007	1	2026-05-28	baseline	dry_run	medium	gpt-5.5	SKILL 明确禁止未指代的同一套/复用，并要求拆成组件、接口、字段、配置边界或进入 Open Questions。
+openspec-008	1	2026-05-28	baseline	dry_run	high	gpt-5.5	SKILL 明确要求新旧轨道显式标注新轨纳入、旧轨静默兼容或旧轨下线。
+openspec-009	0	2026-05-28	baseline	dry_run	medium	gpt-5.5	SKILL 明确要求命令以项目为准，但缺少 README 无 validate 时 Evidence 标 TBD 的显性规则，agent 仍可能漏写 TBD。
+openspec-010	1	2026-05-28	baseline	dry_run	high	gpt-5.5	SKILL 明确规定按契约落地代码前核对 tasks Gate，field-matrix 未定稿或 Open Questions 未关闭不得宣称已实现。
+openspec-009	1	2026-05-28	working-tree	spot_check	medium	gpt-5.5	SKILL.md 明确不得编造 validate 已通过，并要求命令以项目 README/CONTRIBUTING/package scripts 为准；找不到命令时 Evidence 标 TBD：待补项目实际校验命令，覆盖补充实际验证命令诉求。

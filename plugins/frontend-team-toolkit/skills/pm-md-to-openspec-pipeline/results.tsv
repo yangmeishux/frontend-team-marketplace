@@ -1,0 +1,12 @@
+eval_id	pass	date	version	eval_mode	severity	reviewer	notes
+pipeline-001	1	2026-05-28	baseline	dry_run	high	gpt-5.5	SKILL 明确要求阶段 A/B 执行前 Read 两个子技能全文、按阶段 A -> 闸门 G -> 阶段 B 顺序执行，并说明不得用编排技能替代子技能细则。
+pipeline-002	1	2026-05-28	baseline	dry_run	high	gpt-5.5	SKILL 明确规定缺 PM MD / 规格根目录 / 可读仓库时只输出待补充清单，不虚构正文；清单项覆盖 PM MD 或规格根、change-id、仓库/范围。
+pipeline-003	1	2026-05-28	baseline	dry_run	high	gpt-5.5	SKILL 明确规定仅阶段 A 只跑 change-spec-workflow 步骤 1->2->3，阶段 A 内禁止写 OpenSpec 四文件，收尾建议可进入阶段 B。
+pipeline-004	1	2026-05-28	baseline	dry_run	high	gpt-5.5	SKILL 明确规定仅阶段 B 须已有 Change Spec + 实操记录，缺材料则待补充清单，不得直接四文件。
+pipeline-005	1	2026-05-28	baseline	dry_run	high	gpt-5.5	SKILL 明确列出闸门 G，未全部满足则停在阶段 A，并建议补齐证据 / Owner 确认后再跑阶段 B；禁止未过闸门进入阶段 B。
+pipeline-006	1	2026-05-28	baseline	dry_run	high	gpt-5.5	SKILL 明确触发 Reconcile、要求 R0/R1 锁定基准与对齐分析、R1->R5/R7 同步，且禁止从零重跑与残留 vN-1 误加项。
+pipeline-007	1	2026-05-28	baseline	dry_run	high	gpt-5.5	SKILL 明确局部刷新护栏：刷新前列受牵连兄弟文件，输出未同步文件清单和漂移风险声明，先询问是否一并刷新，且不得宣称 Gate/R7 闭合。
+pipeline-008	1	2026-05-28	baseline	dry_run	high	gpt-5.5	SKILL 明确双根目录版本对齐与漂移检测，不一致时禁止继续刷新阶段 B，须触发 Reconcile R1~R5 拉齐，并在 TBD/风险中体现漂移。
+pipeline-009	0	2026-05-28	baseline	dry_run	medium	gpt-5.5	SKILL 明确提示工作区外 PRD 并登记 TBD，可继续执行；但 expected 中“除非有书面例外，不得宣称已按 v3 定稿”没有被直接显性覆盖，容易漏。
+pipeline-010	1	2026-05-28	baseline	dry_run	medium	gpt-5.5	SKILL 明确强制收尾三节：写入或修改路径、仍为 TBD、建议下一步；Reconcile 或局部刷新首行标注基准源文档版本和 reconcile 日期。
+pipeline-009	1	2026-05-28	working-tree	spot_check	medium	gpt-5.5	SKILL.md 明确要求工作区外 PRD 提示复制到 docs/prd、继续执行但登记未入库 TBD，并禁止无书面例外宣称已按 vN/v3 定稿。
