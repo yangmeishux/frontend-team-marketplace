@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "frontend-team-toolkit/skill-engineering/schemas/skill-meta.schema.json",
+  "title": "SkillMeta",
+  "type": "object",
+  "required": ["skill_name", "version", "maturity"],
+  "properties": {
+    "skill_name": { "type": "string" },
+    "version": { "type": "string" },
+    "maturity": { "enum": ["draft", "beta", "stable", "deprecated"] },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" },
+    "baseline": {
+      "type": "object",
+      "properties": {
+        "eval_run_at": { "type": ["string", "null"] },
+        "regression_pass_rate": { "type": ["number", "null"] },
+        "capability_pass_rate": { "type": ["number", "null"] },
+        "notes": { "type": "string" }
+      }
+    },
+    "toolchain": { "type": "object" }
+  }
+}

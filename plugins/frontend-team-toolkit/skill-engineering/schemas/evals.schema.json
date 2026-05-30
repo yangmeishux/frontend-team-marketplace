@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "frontend-team-toolkit/skill-engineering/schemas/evals.schema.json",
+  "title": "SkillEvals",
+  "type": "object",
+  "required": ["skill_name", "evals"],
+  "properties": {
+    "skill_name": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "evals": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/evalCase" }
+    }
+  },
+  "$defs": {
+    "evalCase": {
+      "type": "object",
+      "required": ["id", "prompt", "grader"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "enum": ["capability", "regression"] },
+        "prompt": { "type": "string", "minLength": 1 },
+        "expected": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "string" } }
+          ]
+        },
+        "must_not": { "type": "array", "items": { "type": "string" } },
+        "grader": {
+          "enum": ["rule", "structure", "trajectory", "model", "human", "rule+human"]
+        },
+        "risk": { "enum": ["low", "medium", "high"] },
+        "source": { "type": "string" }
+      }
+    }
+  }
+}

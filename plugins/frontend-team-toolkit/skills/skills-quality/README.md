@@ -2,6 +2,8 @@
 
 本目录用于把 `frontend-team-toolkit` 的 Skill 升级从「使用中体感改写」升级为 **Eval 驱动的 SkillOps 流程**。
 
+新建 Skill 请使用 [`../skill-engineering/`](../skill-engineering/) 脚手架（`new-skill.sh` + `validate-skill.py`）；本目录负责 **已有 Skill 的质量运营**。
+
 ## 当前采用的方案
 
 ```text

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "frontend-team-toolkit/skill-engineering/schemas/skill-issue.schema.json",
+  "title": "SkillIssue",
+  "type": "object",
+  "required": ["date", "skill", "symptom", "severity", "status"],
+  "properties": {
+    "date": { "type": "string" },
+    "skill": { "type": "string" },
+    "task_type": { "type": "string" },
+    "symptom": { "type": "string" },
+    "expected": { "type": "string" },
+    "root_cause": { "type": "string" },
+    "severity": { "enum": ["low", "medium", "high"] },
+    "source": { "type": "string" },
+    "converted_to_eval": { "type": "boolean" },
+    "eval_id": { "type": ["string", "null"] },
+    "status": { "enum": ["open", "triaged", "fixed", "resolved", "wontfix"] }
+  }
+}

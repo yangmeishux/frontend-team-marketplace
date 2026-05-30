@@ -108,7 +108,9 @@ frontend-team-marketplace/
 │       │   ├── vue2-to-vue3-migration/
 │       │   ├── yapi-frontend-integration/
 │       │   ├── change-spec-workflow/
+│       │   ├── skills-quality/   # 质量台账、eval 计划、发布门禁
 │       │   └── code-verify/
+│       ├── skill-engineering/    # Skill 创建模板、Schema、结构校验
 │       └── README.md             # 插件级说明（密钥与 MCP 细节）
 ├── scripts/
 │   └── validate-template.mjs     # manifest / frontmatter 校验
@@ -136,6 +138,21 @@ frontend-team-marketplace/
 ```bash
 cd frontend-team-marketplace && node scripts/validate-template.mjs
 ```
+
+## 新建与校验 Skill
+
+团队 Skill 工程化脚手架位于 `plugins/frontend-team-toolkit/skill-engineering/`：
+
+```bash
+# 创建新 Skill
+./plugins/frontend-team-toolkit/skill-engineering/bin/new-skill.sh my-skill-name
+
+# 校验 Skill 目录结构
+python3 plugins/frontend-team-toolkit/skill-engineering/bin/validate-skill.py \
+  plugins/frontend-team-toolkit/skills/my-skill-name
+```
+
+升级与回归流程见 `plugins/frontend-team-toolkit/skills/skills-quality/`。
 
 ---
 

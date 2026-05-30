@@ -1,0 +1,46 @@
+{
+  "skill_name": "{{SKILL_NAME}}",
+  "evals": [
+    {
+      "id": "{{SKILL_NAME}}-001",
+      "name": "happy-path",
+      "type": "regression",
+      "prompt": "TODO: 最典型的用户请求（真实口吻）",
+      "expected": [
+        "TODO: 必须出现的输出特征 1",
+        "TODO: 必须出现的输出特征 2"
+      ],
+      "must_not": [
+        "TODO: 禁止行为，例如不得编造路径"
+      ],
+      "grader": "rule+human",
+      "risk": "high",
+      "source": "scaffold"
+    },
+    {
+      "id": "{{SKILL_NAME}}-002",
+      "name": "missing-input",
+      "type": "regression",
+      "prompt": "TODO: 故意缺少关键输入的请求",
+      "expected": [
+        "必须追问缺失信息",
+        "不得编造或假设默认值继续"
+      ],
+      "grader": "rule+human",
+      "risk": "high",
+      "source": "scaffold"
+    },
+    {
+      "id": "{{SKILL_NAME}}-003",
+      "name": "edge-case",
+      "type": "capability",
+      "prompt": "TODO: 边界或歧义场景",
+      "expected": [
+        "TODO: 期望的处理方式"
+      ],
+      "grader": "human",
+      "risk": "medium",
+      "source": "scaffold"
+    }
+  ]
+}

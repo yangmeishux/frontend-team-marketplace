@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "prompt": "TODO: happy path — 用户最常说的一句话",
+    "expected": "TODO: 一句话描述期望输出"
+  },
+  {
+    "id": 2,
+    "prompt": "TODO: 缺输入或歧义场景",
+    "expected": "TODO: 应追问或声明风险"
+  },
+  {
+    "id": 3,
+    "prompt": "TODO: 边界场景",
+    "expected": "TODO: 期望行为"
+  }
+]

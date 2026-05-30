@@ -1,0 +1,17 @@
+{
+  "skill_name": "{{SKILL_NAME}}",
+  "version": "0.1.0",
+  "maturity": "draft",
+  "created_at": "{{DATE_TIME}}",
+  "updated_at": "{{DATE_TIME}}",
+  "baseline": {
+    "eval_run_at": null,
+    "regression_pass_rate": null,
+    "capability_pass_rate": null,
+    "notes": "Run baseline before first skill change. See skill-engineering/docs/lifecycle-quickref.md Phase 3."
+  },
+  "toolchain": {
+    "scaffold": "plugins/frontend-team-toolkit/skill-engineering",
+    "eval_runner": "manual | skill-creator | darwin-skill"
+  }
+}

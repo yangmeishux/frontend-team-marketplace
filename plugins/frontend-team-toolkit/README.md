@@ -13,6 +13,16 @@
 
 技能随本插件版本在本仓库内维护与迭代。
 
+## Skill 工程化（`skill-engineering/`）
+
+| 能力 | 说明 |
+|------|------|
+| `skill-engineering/bin/new-skill.sh` | 从标准模板创建新 Skill 目录 |
+| `skill-engineering/bin/validate-skill.py` | 校验 Skill 结构与 frontmatter |
+| `skills/skills-quality/` | 问题池、baseline 计划、发布门禁 |
+
+详见 [`skill-engineering/README.md`](skill-engineering/README.md)。
+
 ## MCP 配置（`mcp.json`）
 
 提交到仓库的是**占位配置**，避免泄露密钥。安装插件后请在本机完成：
