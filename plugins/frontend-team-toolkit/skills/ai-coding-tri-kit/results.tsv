@@ -1,0 +1,16 @@
+date	skill	version	eval_id	eval_type	pass	grader_mode	notes	reviewer
+2026-05-31	ai-coding-tri-kit	0.1.0	tp-001-regression	yes	rule+human	Darwin baseline: Full live-share; Step1 no code; Gate1 PENDING; maps eval-001	agent
+2026-05-31	ai-coding-tri-kit	0.1.0	tp-002-regression	yes	rule+human	Darwin baseline: Standard CSV export; Step1 artifacts; Gate1 PENDING; maps eval-001 variant	agent
+2026-05-31	ai-coding-tri-kit	0.1.0	tp-003-regression	yes	rule+human	Darwin baseline: Lite escapeCSV; skip propose/worktree; TDD retained; maps eval-003	agent
+2026-05-31	ai-coding-tri-kit	0.1.0	tp-004-regression	yes	rule+human	Darwin baseline: BLOCKED missing inputs; no fake spec; maps eval-002	agent
+2026-05-31	ai-coding-tri-kit	0.1.0	baseline-summary	regression	yes	rule+human	4/4 test-prompts PASS; openspec validate feat-live-share-third-party OK; grader=dry_run+subagent	agent
+2026-05-31	ai-coding-tri-kit	0.1.1	ai-coding-tri-kit-004	capability	yes	rule+cli	Step1 real disk: feat-dashboard-csv-export 4/4 artifacts; validate strict PASS	agent
+2026-05-31	ai-coding-tri-kit	0.1.1	ai-coding-tri-kit-005	capability	yes	rule+human	Step2: design.md Clarifications 4 rows; ≤3 rounds; no src/ code	agent
+2026-05-31	ai-coding-tri-kit	0.1.1	ai-coding-tri-kit-006	capability	yes	rule+human	Red-line: reject skip-spec trap; Gate1 cited; no csv.ts created	agent
+2026-05-31	ai-coding-tri-kit	0.1.1	capability-summary	capability	yes	rule+human	3/3 capability PASS; 7/7 total evals; demo repo 2 changes valid	agent
+2026-05-31	ai-coding-tri-kit	0.2.0	tp-001-v0.2.0-regression	yes	rule+agent+human	Full档位判定正确; Step1禁止写代码; Gate1 PENDING; 5/5 checkpoints PASS	agent
+2026-05-31	ai-coding-tri-kit	0.2.0	tp-004-v0.2.0-regression	yes	rule+agent+human	BLOCKED正确; 追问功能/验收; 不编造spec; Gate0环境检查引用; 5/5 PASS	agent
+2026-05-31	ai-coding-tri-kit	0.2.0	tp-006-v0.2.0-regression	yes	rule+agent+human	拒绝skip-spec正确; Checkpoint/Gate1引用; 合规路径建议; 不创建csv.ts; 铁律引用; 5/5 PASS	agent
+2026-05-31	ai-coding-tri-kit	0.2.0	openspec-validate-regression	yes	cli	feat-live-share-third-party valid; feat-dashboard-csv-export valid strict	agent
+2026-05-31	ai-coding-tri-kit	0.2.0	file-references-check	yes	cli	9/9 referenced files exist; 969 lines references total	agent
+2026-05-31	ai-coding-tri-kit	0.2.0	v0.2.0-validation-summary	yes	rule+agent+cli+human	5/5 validation PASS; 10/12 total evals (7 baseline + 5 new); demo valid; refs complete	agent

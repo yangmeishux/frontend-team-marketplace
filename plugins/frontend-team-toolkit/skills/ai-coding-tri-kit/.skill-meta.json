@@ -1,0 +1,46 @@
+{
+  "skill_name": "ai-coding-tri-kit",
+  "version": "0.2.0",
+  "maturity": "beta",
+  "created_at": "2026-05-31T00:00:00Z",
+  "updated_at": "2026-05-31T10:00:00Z",
+  "baseline": {
+    "eval_run_at": "2026-05-31T02:00:00Z",
+    "regression_pass_rate": "4/4 (100%)",
+    "capability_pass_rate": "3/3 (100%)",
+    "total_eval_pass_rate": "7/7 (100%)",
+    "test_prompts_pass": "4/4",
+    "openspec_demo_validate": "feat-live-share-third-party + feat-dashboard-csv-export valid",
+    "grader_mode": "dry_run+subagent+cli",
+    "notes": "Capability eval: Step1-2 real artifacts in live-app-openspec-demo. See results.tsv."
+  },
+  "improvements": {
+    "version": "0.2.0",
+    "date": "2026-05-31",
+    "changes": [
+      "environment-check.md (P0)",
+      "external-dependency-check.md (P0)",
+      "fallback-scenarios.md (P2)",
+      "intensity-tiers.md time estimate revision (P1)",
+      "workflow-matrix.md tool capability judgment (P1)",
+      "SKILL.md references update",
+      "cursor rule mdc update"
+    ],
+    "practice_feasibility_before": "75%",
+    "practice_feasibility_after": "90%+"
+  },
+  "toolchain": {
+    "scaffold": "source/skill-engineering",
+    "eval_runner": "darwin-skill | manual"
+  },
+  "upstream": {
+    "openspec": "https://github.com/Fission-AI/OpenSpec",
+    "superpowers": "https://github.com/obra/superpowers",
+    "agent_skills": "https://github.com/addyosmani/agent-skills",
+    "source_article": "Obsidian Vault/2026年写的文章/AI 编程进阶：三件套 OpenSpec 定方向，Superpowers 带节奏，Agent Skills 守纪律，打造可预测的工程化工作流.md"
+  },
+  "install": {
+    "cursor_personal": "~/.cursor/skills/ai-coding-tri-kit",
+    "cursor_rule": ".cursor/rules/ai-coding-tri-kit.mdc"
+  }
+}

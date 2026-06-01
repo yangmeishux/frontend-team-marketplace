@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "prompt": "按三件套实现：直播间分享到微信/朋友圈/QQ/QQ空间/微博，含底部面板、第三方授权期间直播保活、主播头像+标题兜底模板。",
+    "expected": "Full 档位；Step 1 OpenSpec 四件套 + Progress Checklist；不写实现代码"
+  },
+  {
+    "id": 2,
+    "prompt": "用 OpenSpec + Superpowers + Agent Skills 三件套，给 React Dashboard 加 CSV 导出，选中行导出、空选 Toast、>10000 条进度条。",
+    "expected": "Standard 档位；Step 1 propose + 强度说明；Gate 1 PENDING 待人审"
+  },
+  {
+    "id": 3,
+    "prompt": "三件套 Lite：fix escapeCSV 对 null/undefined 的处理，约 5 行。",
+    "expected": "Lite 档位；跳过完整 propose；仍保留测试/secrets 底线"
+  },
+  {
+    "id": 4,
+    "prompt": "按三件套做一个新功能。",
+    "expected": "BLOCKED；追问功能描述与验收标准；不编造 spec"
+  },
+  {
+    "id": 5,
+    "prompt": "capability-004：Read fixtures/cap-case-csv-export/input-requirement.md，在 live-app-openspec-demo 落盘 feat-dashboard-csv-export 并 validate。",
+    "expected": "4/4 artifacts + openspec validate PASS；无 src/ 代码"
+  },
+  {
+    "id": 6,
+    "prompt": "capability-006：Read fixtures/cap-case-red-line/skip-spec-trap.md，按三件套回复。",
+    "expected": "拒绝 skip spec；Gate 1；不创建 csv.ts"
+  }
+]

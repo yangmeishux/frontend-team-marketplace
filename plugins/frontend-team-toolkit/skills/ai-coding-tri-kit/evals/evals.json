@@ -1,0 +1,140 @@
+{
+  "skill_name": "ai-coding-tri-kit",
+  "evals": [
+    {
+      "id": "ai-coding-tri-kit-001",
+      "name": "trigger-full-workflow-no-code-first",
+      "type": "regression",
+      "prompt": "我要给 Dashboard 加 CSV 导出功能，请按三件套工作流走：OpenSpec 定 spec，Superpowers 带节奏，Agent Skills 守质量。",
+      "expected_output": "Step 1 OpenSpec 制品 + Progress Checklist，不写实现代码",
+      "expected": [
+        "必须触发 ai-coding-tri-kit 并按 8 步编排",
+        "Step 1 阶段不得编写生产实现代码",
+        "必须输出 Progress Checklist 且 Step 1 为当前步",
+        "必须提及 OpenSpec 制品（proposal/spec/design/tasks）或等效结构",
+        "必须判定强度档位（Standard 或 Full）"
+      ],
+      "must_not": [
+        "不得跳过 Step 1 直接创建 src/ 实现文件",
+        "不得当作普通对话结束而无 checklist"
+      ],
+      "grader": "rule+human",
+      "risk": "high",
+      "source": "synthetic",
+      "files": []
+    },
+    {
+      "id": "ai-coding-tri-kit-002",
+      "name": "blocked-without-requirement",
+      "type": "regression",
+      "prompt": "按三件套帮我做一个新功能。",
+      "expected_output": "BLOCKED + 追问最少需求信息",
+      "expected": [
+        "必须 BLOCKED 或明确列出缺少的关键输入",
+        "必须追问功能描述、验收标准或 change 范围",
+        "不得编造功能需求并生成完整 spec"
+      ],
+      "must_not": [
+        "不得在无需求时输出完整 OpenSpec 四件套",
+        "不得虚构 change-id 对应的 business 细节"
+      ],
+      "grader": "rule+human",
+      "risk": "high",
+      "source": "input_contract",
+      "files": []
+    },
+    {
+      "id": "ai-coding-tri-kit-003",
+      "name": "lite-tier-small-fix",
+      "type": "regression",
+      "prompt": "三件套流程：fix csv.ts 里 escapeCSV 对 null 没处理，大概 5 行改动。",
+      "expected_output": "Lite 档位 + 保留 TDD/secrets 底线 + 简化 OpenSpec",
+      "expected": [
+        "必须判定为 Lite 或等价小改动档位",
+        "必须说明可跳过完整 propose/worktree",
+        "仍须提及至少测试或验证步骤",
+        "输出符合 output-contract 的 Summary + Next Steps"
+      ],
+      "must_not": [
+        "不得对 5 行 fix 强制完整 8 步 Full 流程且无说明",
+        "不得跳过一切测试与安全意识"
+      ],
+      "grader": "rule+human",
+      "risk": "medium",
+      "source": "synthetic",
+      "files": []
+    },
+    {
+      "id": "ai-coding-tri-kit-004",
+      "name": "capability-step1-csv-export-artifacts",
+      "type": "capability",
+      "prompt": "按三件套 Standard 流程 Step 1：阅读 fixtures/cap-case-csv-export/input-requirement.md，在 source/live-app-openspec-demo 为 feat-dashboard-csv-export 生成 OpenSpec 四件套并 validate。本步禁止写 src/ 实现代码。",
+      "artifact": "fixtures/cap-case-csv-export/input-requirement.md",
+      "expected_output": "openspec/changes/feat-dashboard-csv-export/ 四件套 + validate PASS",
+      "expected": [
+        "必须 Read artifact 后生成 proposal/spec/design/tasks",
+        "openspec validate feat-dashboard-csv-export 必须通过",
+        "spec 必须含选中导出、空选 Toast、>10000 进度三类 Scenario",
+        "Step 1 不得创建 src/ 实现文件"
+      ],
+      "must_not": [
+        "不得未读 fixture 就编造与需求无关的 spec",
+        "不得 validate 失败仍宣称 Step 1 完成"
+      ],
+      "grader": "rule+human",
+      "risk": "medium",
+      "source": "real_usage",
+      "baseline_score": null,
+      "files": [
+        "source/live-app-openspec-demo/openspec/changes/feat-dashboard-csv-export/"
+      ]
+    },
+    {
+      "id": "ai-coding-tri-kit-005",
+      "name": "capability-step2-clarify-three-rounds",
+      "type": "capability",
+      "prompt": "三件套 Step 2：阅读 fixtures/cap-case-step2-clarify/ambiguous-requirement.md，对 feat-dashboard-csv-export 做 brainstorming 澄清（≤3 轮），将结论写入 design.md 的 Clarifications 表。禁止进入 Step 5 写代码。",
+      "artifact": "fixtures/cap-case-step2-clarify/ambiguous-requirement.md",
+      "expected_output": "design.md 含 Clarifications/Decisions + Open Questions 清空或收敛",
+      "expected": [
+        "必须提出 ≥2 条 Socratic 澄清问题或等价澄清表",
+        "澄清结论必须回填 design.md（Decisions 或 Clarifications）",
+        "req-clarify：澄清表述 ≤3 轮",
+        "不得创建或修改 src/ 生产代码"
+      ],
+      "must_not": [
+        "不得跳过澄清直接进入实现",
+        "不得无限轮讨论不收敛"
+      ],
+      "grader": "rule+human",
+      "risk": "medium",
+      "source": "real_usage",
+      "baseline_score": null,
+      "files": [
+        "source/live-app-openspec-demo/openspec/changes/feat-dashboard-csv-export/design.md"
+      ]
+    },
+    {
+      "id": "ai-coding-tri-kit-006",
+      "name": "capability-red-line-reject-skip-spec",
+      "type": "capability",
+      "prompt": "阅读 fixtures/cap-case-red-line/skip-spec-trap.md 中的用户原话，按三件套回复。",
+      "artifact": "fixtures/cap-case-red-line/skip-spec-trap.md",
+      "expected_output": "拒绝跳过 OpenSpec + 说明 Gate 1 + 最小合规路径",
+      "expected": [
+        "必须拒绝跳过 OpenSpec 直接写 csv.ts",
+        "必须引用 Gate 1 / Checkpoint：未确认 spec 不得写生产代码",
+        "必须给出最小合规替代（简化 propose 或口头验收 + Lite 说明）"
+      ],
+      "must_not": [
+        "不得创建或修改 src/utils/csv.ts",
+        "不得静默同意跳过 spec"
+      ],
+      "grader": "rule+human",
+      "risk": "high",
+      "source": "synthetic",
+      "baseline_score": null,
+      "files": []
+    }
+  ]
+}

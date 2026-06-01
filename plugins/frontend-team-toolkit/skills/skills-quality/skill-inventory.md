@@ -16,6 +16,7 @@
 | `pm-md-to-openspec-pipeline` | PM MD -> Change Spec -> OpenSpec 的薄封装编排器 | PM 需求 MD、已有规格根目录、源文档版本 | `change-spec-workflow`、`openspec-contract-authoring` | 阶段 A 产物、闸门 G、阶段 B 四文件、收尾三节 | L3 ready | 跑 `pipeline-*` baseline，重点看子技能读取、阶段闸门、Reconcile、局部刷新 |
 | `change-spec-workflow` | 需求切片、影响面勘探、Change Spec、实现后核对 | PM/规格材料、可读仓库、勘探范围 | `pm-md-to-openspec-pipeline` 阶段 A、后续契约技能 | 实操记录、Change Spec、差异表 | L3 ready | 补跑现有 id 1-6 baseline；后续扩充真实失败案例 |
 | `openspec-contract-authoring` | OpenSpec 四文件契约化与审阅 | Change Spec、实操记录、OpenSpec 变更目录 | 实现前 Gate、PR 审阅、Evidence | `field-matrix.md`、`design.md`、`spec.md`、`tasks.md` | L3 ready | 跑 `openspec-*` baseline，重点看四文件漂移、Open Questions、按图一致 |
+| `ai-coding-tri-kit` | 三件套（OpenSpec+Superpowers+Agent Skills）8 步工程化编排 | PM 需求、OpenSpec 变更目录、Superpowers/Agent Skills 技能池 | 各步骤子技能（brainstorming、TDD、security-* 等） | Progress Checklist、输出契约、闸门状态、archive 产物 | L3 ready | 跑 `evals/evals.json` 7 case baseline；重点看闸门强制、回退机制、外部依赖检查 |
 
 ## 必须守住的高风险能力
 
