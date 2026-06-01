@@ -10,6 +10,7 @@
 | `skills/vue2-to-vue3-migration` | 两阶段协议 + 工程就绪；`reference` §1–§12（模板、扫雷、完整校验、坑点）、可选 `MIGRATION_BASELINE` |
 | `skills/yapi-frontend-integration` | 两阶段摘要 + YApi MCP；`reference`（字段映射、TS、排障、安全） |
 | `skills/code-verify` | **先锚定再迭代**：五阶段闸门 + 七维双锚验证；`report-template`、`checklist-template`、`validate.sh` |
+| `skills/incremental-implementation` | **锚定现有代码做增量迭代**：源文档 vN 变更后不 greenfield 重跑；Reconcile 代码编排 IC-R0~IC-R7、多产物版本对齐、局部更新护栏；`实现映射` 锚点 + 五阶段流水线；接力 `pm-md-to-openspec-pipeline` R6 |
 
 技能随本插件版本在本仓库内维护与迭代。
 

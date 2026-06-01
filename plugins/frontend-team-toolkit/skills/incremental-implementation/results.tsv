@@ -1,0 +1,11 @@
+eval_id	pass	date	version	eval_mode	severity	reviewer	notes
+incremental-001	1	2026-05-29	v1.1.0	dry_run	high	gpt-5.5	P0 明确要求 git status 工作区干净，不干净则停，不得无基线改代码。
+incremental-002	1	2026-05-29	v1.1.0	dry_run	high	gpt-5.5	§二缺对齐分析时停下并建议 pipeline R0~R5；用户未书面接受 tasks-diff 风险则不继续。
+incremental-003	1	2026-05-29	v1.1.0	dry_run	high	gpt-5.5	§一铁律禁止 greenfield 重建；P3 修改须原地最小编辑；不变项显式跳过断言。
+incremental-004	1	2026-05-29	v1.1.0	dry_run	high	gpt-5.5	§六 Reconcile 代码编排 IC-R0~IC-R7；IC-R1 读三栏；IC-R7 未闭合禁止宣称已按 vN 对齐。
+incremental-005	1	2026-05-29	v1.1.0	dry_run	high	gpt-5.5	§八局部代码更新护栏：未同步产物清单 + 风险声明；禁止悄悄闭合 IC-R7。
+incremental-006	1	2026-05-29	v1.1.0	dry_run	high	gpt-5.5	§七 IC-R2 多产物版本漂移检测；不一致时禁止继续 P3，建议 pipeline 或书面指定基准。
+incremental-007	1	2026-05-29	v1.1.0	dry_run	medium	gpt-5.5	P1 不变项须显式列出；P4 git diff 复核；§十二收尾含显式未动列表。
+incremental-008	1	2026-05-29	v1.1.0	dry_run	medium	gpt-5.5	P0.5 映射缺失时反向建图；锚点待确认禁止臆造；建完再进 P1。
+incremental-009	1	2026-05-29	v1.1.0	dry_run	medium	gpt-5.5	§九分工明确不改契约语义；IC-R6 不一致列 Open Question 或回 pipeline。
+incremental-010	1	2026-05-29	v1.1.0	dry_run	medium	gpt-5.5	§十二收尾三块：代码改动首行标 vN+commit、显式未动、回写与 TBD/未同步清单。

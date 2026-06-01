@@ -18,6 +18,7 @@
 1. `change-spec-workflow/test-prompts.json` id 1-6
 2. `pm-md-to-openspec-pipeline/test-prompts.json` `pipeline-001` 到 `pipeline-010`
 3. `openspec-contract-authoring/test-prompts.json` `openspec-001` 到 `openspec-010`
+4. `incremental-implementation/test-prompts.json` `incremental-001` 到 `incremental-010`
 
 ## 结果记录格式
 

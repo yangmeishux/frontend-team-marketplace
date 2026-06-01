@@ -42,6 +42,10 @@ change-spec-workflow/
 openspec-contract-authoring/
   test-prompts.json
   results.tsv
+
+incremental-implementation/
+  test-prompts.json
+  results.tsv
 ```
 
 ## 升级原则

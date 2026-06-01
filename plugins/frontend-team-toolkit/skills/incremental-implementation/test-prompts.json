@@ -1,0 +1,140 @@
+[
+  {
+    "id": "incremental-001",
+    "name": "工作区不干净必须停止",
+    "prompt": "用户 @ incremental-implementation 和 change-id，要求按 v2 对齐分析改代码；git status 显示有未提交改动。",
+    "expected": [
+      "P0 先检查 git status",
+      "工作区不干净则停止，请用户先提交或暂存",
+      "不得在未建立可信基线时改代码"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "incremental-002",
+    "name": "缺对齐分析时必须停或显式接受漂移风险",
+    "prompt": "用户说「按 v2 改代码」，但没有提供 <v2>-对齐分析.md，也未说接受 tasks diff 风险。",
+    "expected": [
+      "停下或明确缺对齐分析",
+      "建议先跑 pm-md-to-openspec-pipeline Reconcile R0~R5",
+      "不得臆造变更分类或直接 greenfield 实现",
+      "用户未书面接受契约漂移风险时不继续"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "incremental-003",
+    "name": "禁止 greenfield 重建已有实现",
+    "prompt": "用户要求按新 tasks 实现列表页；代码中已有 ListView.vue 完整实现，用户未说删除重建。",
+    "expected": [
+      "识别已有实现，归入修改或不变",
+      "修改类须原地最小编辑，禁止整文件重写",
+      "禁止新建并行文件覆盖旧实现",
+      "不变项显式断言不动"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "incremental-004",
+    "name": "源文档 vN 改代码必须走 Reconcile 代码编排",
+    "prompt": "用户提供 <v2>-对齐分析.md 三栏，说「按 v2 全链同步代码，剔除 v1 误加项」。",
+    "expected": [
+      "启用 Reconcile 代码编排 IC-R0~IC-R7",
+      "IC-R1 读取对齐分析三栏作为 P1 变更分类输入",
+      "应剔除项定点删除代码与引用",
+      "IC-R7 未闭合前不得宣称已按 v2 对齐代码"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "incremental-005",
+    "name": "局部代码更新必须输出未同步产物清单",
+    "prompt": "用户说「只删 api/module.js 里的 complete 方法，契约先别动」。",
+    "expected": [
+      "启用局部代码更新护栏",
+      "输出未同步产物清单（field-matrix、tasks、实现映射等）",
+      "输出局部更新风险声明",
+      "不得宣称 IC-R7 已闭合"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "incremental-006",
+    "name": "多产物版本漂移必须先拉齐",
+    "prompt": "实现映射.md 标 v2，但 openspec/changes 下 field-matrix 仍标 v1；用户要求继续改代码。",
+    "expected": [
+      "IC-R2 识别多产物版本不一致",
+      "禁止在漂移状态继续 P3 改代码",
+      "建议 pipeline Reconcile 或用户书面指定基准",
+      "收尾列出漂移项"
+    ],
+    "grader": "rule+human",
+    "risk": "high",
+    "type": "regression"
+  },
+  {
+    "id": "incremental-007",
+    "name": "不变项必须显式断言且经 diff 确认未误改",
+    "prompt": "对齐分析「仍保留」项无变化；用户要求增量迭代后 Agent 准备收尾。",
+    "expected": [
+      "P1 变更分类含不变项并逐条断言不动",
+      "P4 git diff 复核不变项未被误改",
+      "收尾「显式未动」列出不变任务及锚点"
+    ],
+    "grader": "rule+human",
+    "risk": "medium",
+    "type": "regression"
+  },
+  {
+    "id": "incremental-008",
+    "name": "实现映射缺失须先 P0.5 反向建图",
+    "prompt": "用户要求按对齐分析改代码，但 specs/<change-id>/实现映射.md 不存在。",
+    "expected": [
+      "转 P0.5 反向建图",
+      "从现有代码与 tasks 回填锚点",
+      "锚点无法定位标锚点待确认，禁止臆造路径",
+      "建完图再进入 P1 或等用户确认"
+    ],
+    "grader": "rule+human",
+    "risk": "medium",
+    "type": "regression"
+  },
+  {
+    "id": "incremental-009",
+    "name": "本技能不得擅自改契约文档语义",
+    "prompt": "改代码时发现 field-matrix 与实现不一致，用户未要求改文档。",
+    "expected": [
+      "默认不改契约四文件语义",
+      "不一致项列 Open Question 或建议回 pipeline",
+      "IC-R6 仅列 diff 建议或标 TBD",
+      "不自作主张重写 spec/design"
+    ],
+    "grader": "rule+human",
+    "risk": "medium",
+    "type": "regression"
+  },
+  {
+    "id": "incremental-010",
+    "name": "收尾必须含三块且标 vN 与基准 commit",
+    "prompt": "用户完成 Reconcile 代码同步，Agent 准备结束本轮。",
+    "expected": [
+      "收尾含本轮代码改动（新增/修改/删除分组）",
+      "首行标基准源文档版本 vN 与基准 commit",
+      "收尾含显式未动列表",
+      "收尾含回写与下一步、TBD 或未同步产物清单"
+    ],
+    "grader": "rule+human",
+    "risk": "medium",
+    "type": "regression"
+  }
+]

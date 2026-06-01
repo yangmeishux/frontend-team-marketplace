@@ -188,7 +188,7 @@ R4 ❺ 阶段 A · Change Spec 受影响段重写（禁留 vN-1 残段）
     ↓
 R5 ❻ 阶段 B · 四文件同步刷新（按 field-matrix → design → spec → tasks）
     ↓
-R6 ❼ 实现代码核对（仅在用户书面要求时改代码；否则只列 diff 建议）
+R6 ❼ 实现代码核对（默认仅列 diff 建议；**代码落地**见 [`../incremental-implementation/SKILL.md`](../incremental-implementation/SKILL.md) IC-R0~IC-R7）
     ↓
 R7 ❽ Reconcile 闸门：所有产物已剔 vN-1 误加项、已纳 vN 新增项、版本号一致
 ```
