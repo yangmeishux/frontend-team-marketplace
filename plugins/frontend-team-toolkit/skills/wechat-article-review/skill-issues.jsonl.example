@@ -1,0 +1,1 @@
+{"date":"2026-05-30","skill":"wechat-article-review","task_type":"example","symptom":"复制为 skill-issues.jsonl 后删除本行；记录真实任务中的评分跑偏","expected":"按 output-contract 输出","severity":"low","source":"scaffold","converted_to_eval":false,"eval_id":null,"status":"open"}

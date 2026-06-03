@@ -1,0 +1,119 @@
+{
+  "skill_name": "wechat-article-review",
+  "evals": [
+    {
+      "id": "wechat-article-review-001",
+      "name": "weak-draft-fail-with-checklist",
+      "type": "regression",
+      "prompt": "请给下面这篇公众号干货初稿打分，类型干货，受众是 Cursor 新手。\n\n# 如何用 AI 写代码\n\nAI 很强大， everyone 都在用。本文介绍一些方法。\n\n首先你要打开编辑器。然后你可以问 AI。最后你就写好了。\n\n总之 AI 是未来，欢迎关注。",
+      "expected": [
+        "结论必须为 ❌ 不通过且综合评分低于 9.0",
+        "必须包含五维得分表（主题与价值、结构与逻辑、干货密度、可读性与表达、标题与 CTA）",
+        "必须包含按优先级排列的主要问题，且每条含位置与可执行修改建议",
+        "必须包含 P0/P1/P2 或等价的修改清单 TODO",
+        "必须给出复评目标分数区间"
+      ],
+      "must_not": [
+        "不得给出 ≥9.0 通过结论",
+        "不得只有总分没有维度依据"
+      ],
+      "grader": "rule+human",
+      "risk": "high",
+      "source": "synthetic_weak_draft"
+    },
+    {
+      "id": "wechat-article-review-002",
+      "name": "missing-body-blocked",
+      "type": "regression",
+      "prompt": "帮我评审一下这篇公众号文章能不能发。",
+      "expected": [
+        "必须 BLOCKED 或明确说明缺少正文/路径",
+        "必须列出需要用户补充的最少信息（文章内容或路径）",
+        "不得编造文章内容或虚构分数"
+      ],
+      "must_not": [
+        "不得输出具体维度得分表（无正文时）",
+        "不得假设默认范文并评分"
+      ],
+      "grader": "rule+human",
+      "risk": "high",
+      "source": "input_contract"
+    },
+    {
+      "id": "wechat-article-review-003",
+      "name": "strong-draft-pass",
+      "type": "capability",
+      "prompt": "请评审这篇公众号干货（受众：公众号运营者），按 9 分及格线打分。\n\n# 3 个信号说明你的 Skill 只是提示词，不是工程资产\n\n**结论先说**：如果你只有 SKILL.md、没有 eval 和回归记录，改 skill 只能靠「感觉更好」。\n\n## 1. 没有 test case\n真实任务失败后，问题只留在聊天记录里。\n\n## 2. 没有 baseline\n改完无法证明 regression 没退步。\n\n## 3. 没有 CHANGELOG\n团队不知道 v0.3 为何比 v0.2 多两行。\n\n**CTA**：在评论区回复「eval」，我发你 skill 问题池模板。\n\n---\n（结构清晰、有清单干货、有 CTA；可因篇幅短在干货维度略扣但应接近或达到 9 分边界——须说明依据）",
+      "expected": [
+        "必须输出五维得分表与加权总分",
+        "若 ≥9.0 则结论 ✅ 通过；若 8.5–8.9 则仍 ❌ 不通过并说明差多少",
+        "必须指出至少 1 个亮点",
+        "评分依据必须与正文内容对应，不能泛泛而谈"
+      ],
+      "must_not": [
+        "不得未读内容就给满分",
+        "不得 <9 时省略修改建议（若判定不通过）"
+      ],
+      "grader": "human",
+      "risk": "medium",
+      "source": "synthetic_borderline"
+    },
+    {
+      "id": "wechat-article-review-004",
+      "name": "unfulfilled-promise-penalty",
+      "type": "regression",
+      "prompt": "打分：\n\n# 完整 OpenSpec 教程\n\n下文我将给出 7 步完整操作清单和可复制命令。\n\n## 为什么重要\nOpenSpec 很重要。\n\n## 总结\n欢迎关注，下一篇再讲步骤。",
+      "expected": [
+        "必须在主要问题中标记「承诺未兑现」（ promised 7 步/命令未出现）",
+        "综合评分应低于 9.0",
+        "必须给出最小修复动作（补小节/清单/过渡说明之一）",
+        "位置描述须可复现（如小标题「为什么重要」附近）"
+      ],
+      "must_not": [
+        "不得忽略「下文将给出」类空头承诺",
+        "不得仍给出通过结论"
+      ],
+      "grader": "rule+human",
+      "risk": "high",
+      "source": "promise_consistency"
+    },
+    {
+      "id": "wechat-article-review-005",
+      "name": "tech-blueprint-wechat-adaptation",
+      "type": "capability",
+      "prompt": "请评审 articles/skill-engineering-blueprint.md（干货，受众 AI Skill 作者），按 9 分线打分，看能否发公众号。",
+      "expected": [
+        "必须 Read 正文后打分，五维表 + 加权总分",
+        "若缺 CTA 或偏技术文档腔，应扣标题与 CTA / 可读性维度并低于 9.0 或边界说明",
+        "不通过时必须含 P0/P1 修改清单与复评目标",
+        "应将发现的问题记录到 skill-issues.jsonl（用户要求时）"
+      ],
+      "must_not": [
+        "不得未读文件就给通过",
+        "不得对明显缺 CTA 的稿给 ≥9.0"
+      ],
+      "grader": "rule+human",
+      "risk": "medium",
+      "source": "real_usage",
+      "artifact": "articles/skill-engineering-blueprint.md",
+      "baseline_score": 8.4
+    },
+    {
+      "id": "wechat-article-review-006",
+      "name": "sop-wechat-series-pass",
+      "type": "regression",
+      "prompt": "评审 articles/skill-upgrade-sop-wechat.md，能否作为 Blueprint 的下篇公众号干货发布？",
+      "expected": [
+        "须有 TL;DR 或等效速览",
+        "须有明确 CTA（留言/转发/模板链接）",
+        "干货含可执行步骤（7天计划或七步 SOP）",
+        "综合评分应 ≥9.0 或明确不通过理由"
+      ],
+      "grader": "rule+human",
+      "risk": "medium",
+      "source": "real_usage",
+      "artifact": "articles/skill-upgrade-sop-wechat.md",
+      "baseline_score": 9.3
+    }
+  ]
+}

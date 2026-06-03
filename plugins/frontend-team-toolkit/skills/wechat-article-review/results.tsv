@@ -1,0 +1,4 @@
+date	skill	version	eval_id	eval_type	pass	grader_mode	notes	reviewer
+2026-05-30	wechat-article-review	0.1.0	wechat-article-review-005	capability	yes	human+rule	v1 score=8.4 fail; report=reviews/2026-05-30-skill-engineering-blueprint.md	agent
+2026-05-30	wechat-article-review	0.1.0	wechat-article-review-005	re_review	yes	human+rule	v2 score=9.2 pass DONE_WITH_CONCERNS; report=reviews/2026-05-30-skill-engineering-blueprint-v2.md	agent
+2026-05-30	wechat-article-review	0.1.0	wechat-article-review-006	regression	yes	human+rule	skill-upgrade-sop-wechat score=9.3 pass; report=reviews/2026-05-30-skill-upgrade-sop-wechat.md	agent

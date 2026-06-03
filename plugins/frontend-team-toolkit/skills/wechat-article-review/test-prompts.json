@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "prompt": "请给这篇公众号初稿打分，干货类：「# AI 改变世界\n\nAI 很重要。大家都要学。打开工具就能写代码。关注公众号获取更多。」",
+    "expected": "❌ 不通过，<9 分，五维表 + P0 修改清单 + 复评目标"
+  },
+  {
+    "id": 2,
+    "prompt": "这篇文章能发吗？（未粘贴正文）",
+    "expected": "BLOCKED，追问正文或路径，不编造评分"
+  },
+  {
+    "id": 3,
+    "prompt": "评审 articles/skill-upgrade-sop-wechat.md，按 9 分线给报告",
+    "expected": "Read 文件后输出完整评分报告；结论与维度依据一致"
+  },
+  {
+    "id": 4,
+    "prompt": "只能改 30 分钟，这篇 8.6 分的稿子怎么提到 9 分？（附一篇中等质量 800 字干货）",
+    "expected": "除常规模板外，必须附 30 分钟分时段执行脚本与验收句式"
+  },
+  {
+    "id": 5,
+    "prompt": "评审 articles/skill-engineering-blueprint.md，能否发公众号？并把问题记入 skill-issues.jsonl",
+    "expected": "Read 文件；8.x 分不通过时给 P0/P1 清单；问题写入 skill 目录"
+  },
+  {
+    "id": 6,
+    "prompt": "评审 articles/skill-upgrade-sop-wechat.md 能否作为 Blueprint 系列下篇发布",
+    "expected": "≥9.0 或完整不通过清单；须有 TL;DR + CTA + 7天/七步可执行内容"
+  }
+]

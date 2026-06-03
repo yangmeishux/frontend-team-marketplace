@@ -12,6 +12,7 @@
 | `skills/code-verify` | **先锚定再迭代**：五阶段闸门 + 七维双锚验证；`report-template`、`checklist-template`、`validate.sh` |
 | `skills/incremental-implementation` | **锚定现有代码做增量迭代**：源文档 vN 变更后不 greenfield 重跑；Reconcile 代码编排 IC-R0~IC-R7、多产物版本对齐、局部更新护栏；`实现映射` 锚点 + 五阶段流水线；接力 `pm-md-to-openspec-pipeline` R6 |
 | `skills/ai-coding-tri-kit` | **三件套工程化工作流**：OpenSpec（What）→ Superpowers（How）→ Agent Skills（Quality）8 步流水线；强度分级 Full/Standard/Lite；闸门强制、回退机制、输出契约；适合新功能/中等以上改动、可预测交付场景 |
+| `skills/wechat-article-review` | **微信公众号文章评分审稿**：0–10 分结构化评分与改稿反馈；五维加权评分（主题、结构、清晰度、实用性、合规）；≥9.0 通过，<9.0 必须输出 P0/P1/P2 修改清单；含评分细则、输出契约、持久化记录 |
 
 技能随本插件版本在本仓库内维护与迭代。
 
