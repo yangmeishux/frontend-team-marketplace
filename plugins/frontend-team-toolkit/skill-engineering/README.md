@@ -39,8 +39,18 @@ skill-engineering/
 ├── bin/
 │   ├── new-skill.sh          # 从模板生成 Skill 目录
 │   └── validate-skill.py     # frontmatter + 工业级必备文件校验
-├── schemas/                  # JSON Schema（evals、test-prompts、meta、issues）
+├── schemas/                  # JSON Schema（evals、test-prompts、meta、issues、workflows）
 ├── templates/new-skill/      # 新 Skill 模板包（勿直接使用，请用脚本复制）
+│   ├── workflows/            # 动态编排脚本模板（新增）
+│   │   ├── README.md
+│   │   ├── serial-workflow.js
+│   │   ├── parallel-workflow.js
+│   │   ├── conditional-workflow.js
+│   │   ├── loop-workflow.js
+│   │   └── adversarial-workflow.js
+│   └── evals/
+│       ├── evals.json        # 输出Eval模板
+│       └── trajectory-evals.json  # 过程Eval模板（新增）
 └── docs/
     └── lifecycle-quickref.md # 8 Phase 生命周期速查
 ```
@@ -51,18 +61,56 @@ skill-engineering/
 
 ```text
 <skill-name>/
-├── SKILL.md
+├── SKILL.md                    # 静态知识：触发条件、契约、Workflow描述
 ├── CHANGELOG.md
 ├── .skill-meta.json
-├── evals/evals.json
+├── evals/
+│   ├── evals.json              # 输出 Eval（验证输出内容）
+│   └── trajectory-evals.json   # 过程 Eval（验证Workflows执行）
 ├── test-prompts.json
 ├── results.tsv
 ├── skill-issues.jsonl.example
-├── references/output-contract.md
+├── references/
+│   └── output-contract.md
+├── workflows/                  # ← 动态编排脚本（新增）
+│   ├── README.md               # Workflows使用说明
+│   ├── serial-workflow.js      # 串行编排模板
+│   ├── parallel-workflow.js    # 并行编排模板
+│   ├── conditional-workflow.js # 条件路由模板
+│   ├── loop-workflow.js        # 循环直到完成模板
+│   └── adversarial-workflow.js # 对抗验证模板
 └── scripts/validate-output.sh
 ```
 
 与 [agentskills.io 规范](https://agentskills.io/specification) 对齐：`name` / `description` 必填；团队 Skill 默认设置 `disable-model-invocation: true`，需显式 `@` 触发。
+
+---
+
+## 动态编排组件（新增）
+
+Skill 现在支持 **Dynamic Workflows**，提供确定性执行能力：
+
+| Workflow类型 | 适用场景 | 模板文件 |
+|-------------|----------|----------|
+| **串行编排** | 子Skill有依赖顺序 | `workflows/serial-workflow.js` |
+| **并行编排** | 子Skill可独立执行 | `workflows/parallel-workflow.js` |
+| **条件路由** | 依输入选择不同子Skill | `workflows/conditional-workflow.js` |
+| **循环直到完成** | 不确定工作量的任务 | `workflows/loop-workflow.js` |
+| **对抗验证** | 独立agent验证输出 | `workflows/adversarial-workflow.js` |
+
+**SKILL.md 与 Workflows 分工**：
+
+| 组件 | 负责什么 | 不负责什么 |
+|------|----------|------------|
+| **SKILL.md** | 触发条件、契约、知识 | 具体执行逻辑 |
+| **Workflows** | 具体执行逻辑、编排实现 | 触发判断、知识定义 |
+| **trajectory Eval** | 验证执行过程 | 验证输出内容（由output Eval负责） |
+
+**新增 Schema**：
+
+| 文件 | 用途 |
+|------|------|
+| `schemas/workflow.schema.json` | Workflows 脚本元数据结构 |
 
 ---
 
@@ -91,10 +139,12 @@ new-skill.sh 创建
 
 | 文件 | 用途 |
 |------|------|
-| `schemas/evals.schema.json` | `evals/evals.json` 结构 |
+| `schemas/evals.schema.json` | `evals/evals.json` 结构（输出Eval） |
+| `schemas/trajectory-evals.schema.json` | `evals/trajectory-evals.json` 结构（过程Eval） |
 | `schemas/test-prompts.schema.json` | `test-prompts.json` 结构 |
 | `schemas/skill-meta.schema.json` | `.skill-meta.json` 结构 |
 | `schemas/skill-issue.schema.json` | `skill-issues.jsonl` 单行结构 |
+| `schemas/workflow.schema.json` | `workflows/*.js` 元数据结构（新增） |
 
 可在 CI 或本地脚本中用任意 JSON Schema 校验器引用上述文件。
 

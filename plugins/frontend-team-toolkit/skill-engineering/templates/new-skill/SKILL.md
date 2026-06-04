@@ -6,6 +6,8 @@ disable-model-invocation: true
 metadata:
   version: "0.1.0"
   maturity: draft
+  has_workflows: true
+  workflow_types: ["serial", "parallel", "conditional", "loop", "adversarial"]
 ---
 
 # {{SKILL_TITLE}}
@@ -58,9 +60,37 @@ metadata:
 - 问题池：复制 `skill-issues.jsonl.example` → `skill-issues.jsonl`
 - 团队升级流程：见 [`../skills-quality/`](../skills-quality/) 与 [`../skill-engineering/docs/lifecycle-quickref.md`](../skill-engineering/docs/lifecycle-quickref.md)
 
+## Dynamic Workflows
+
+> **Workflows provide deterministic execution of orchestration patterns.** See `workflows/README.md` for details.
+
+本 Skill 包含以下动态编排脚本：
+
+| Workflow | Pattern | 触发词 | 用途 |
+|----------|---------|--------|------|
+| `workflows/serial-workflow.js` | 串行编排 | 「串行」「依次」 | 有依赖的多步骤执行 |
+| `workflows/parallel-workflow.js` | 并行编排 | 「并行」「同时」 | 无依赖的多分支并行 |
+| `workflows/conditional-workflow.js` | 条件路由 | 「按状态」「路由」 | 动态选择子 Skill |
+| `workflows/loop-workflow.js` | 循环直到完成 | 「循环」「直到」 `/loop` | 不确定工作量的任务 |
+| `workflows/adversarial-workflow.js` | 对抗验证 | 「验证」「复核」 | 独立 agent 验证输出 |
+
+**调用方式**：
+
+- Claude 自动选择：根据触发词选择合适 workflow
+- 用户显式指定：「用并行 workflow 审稿」
+- `/loop` 命令：定期回归使用 loop-workflow
+
+**验证**：
+
+- trajectory Eval：验证 workflow 执行过程（见 `evals/trajectory-evals.json`）
+
+---
+
 ## Bundled Resources
 
 | 路径 | 何时读取 |
 |------|----------|
 | `references/output-contract.md` | 每次执行前 |
+| `workflows/*.js` | Claude 根据触发词选择执行 |
+| `evals/trajectory-evals.json` | 验证 workflow 执行过程 |
 | `scripts/validate-output.sh` | 输出完成后（可选） |

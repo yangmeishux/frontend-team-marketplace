@@ -1,0 +1,78 @@
+{
+  "skill_name": "{{SKILL_NAME}}",
+  "evals": [
+    {
+      "id": "{{SKILL_NAME}}-workflow-serial-001",
+      "name": "serial-workflow-order-check",
+      "type": "regression",
+      "prompt": "Use workflows/serial-workflow.js with input TODO",
+      "expected": [
+        "Must runAgent {{PHASE_1_NAME}} first",
+        "Must runAgent {{PHASE_2_NAME}} second",
+        "Must synthesize results after both complete",
+        "Agents must be executed serially (with await)"
+      ],
+      "must_not": [
+        "Must NOT skip {{PHASE_1_NAME}} and execute {{PHASE_2_NAME}} directly",
+        "Must NOT execute agents in parallel (serial workflow requires serial execution)"
+      ],
+      "grader": "trajectory",
+      "risk": "high",
+      "source": "workflow_contract"
+    },
+    {
+      "id": "{{SKILL_NAME}}-workflow-parallel-001",
+      "name": "parallel-workflow-both-agents",
+      "type": "regression",
+      "prompt": "Use workflows/parallel-workflow.js with input TODO",
+      "expected": [
+        "Must spawn {{AGENT_1_NAME}} agent",
+        "Must spawn {{AGENT_2_NAME}} agent",
+        "Must use Promise.all for parallel execution",
+        "Must synthesize results after both complete"
+      ],
+      "must_not": [
+        "Must NOT execute only one agent",
+        "Must NOT execute agents serially (parallel workflow requires parallel execution)"
+      ],
+      "grader": "trajectory",
+      "risk": "high",
+      "source": "workflow_contract"
+    },
+    {
+      "id": "{{SKILL_NAME}}-workflow-conditional-001",
+      "name": "conditional-workflow-route-check",
+      "type": "regression",
+      "prompt": "Use workflows/conditional-workflow.js with input TODO and status={{ROUTE_CONDITION_1}}",
+      "expected": [
+        "Must route to {{AGENT_1_NAME}} agent",
+        "Must NOT route to {{AGENT_2_NAME}} or other agents"
+      ],
+      "must_not": [
+        "Must NOT route to wrong agent",
+        "Must NOT skip classification and execute default without checking condition"
+      ],
+      "grader": "trajectory",
+      "risk": "medium",
+      "source": "workflow_contract"
+    },
+    {
+      "id": "{{SKILL_NAME}}-workflow-loop-001",
+      "name": "loop-workflow-iteration-check",
+      "type": "capability",
+      "prompt": "Use workflows/loop-workflow.js with maxIterations=5",
+      "expected": [
+        "Must loop until stop condition is met or max iterations reached",
+        "Must record results for each iteration",
+        "Must output totalIterations count"
+      ],
+      "must_not": [
+        "Must NOT exceed maxIterations",
+        "Must NOT continue looping after stop condition is met"
+      ],
+      "grader": "trajectory",
+      "risk": "medium",
+      "source": "workflow_contract"
+    }
+  ]
+}

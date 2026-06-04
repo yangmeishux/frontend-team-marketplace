@@ -8,10 +8,24 @@
     "eval_run_at": null,
     "regression_pass_rate": null,
     "capability_pass_rate": null,
+    "trajectory_eval_pass_rate": null,
     "notes": "Run baseline before first skill change. See skill-engineering/docs/lifecycle-quickref.md Phase 3."
+  },
+  "workflows": {
+    "enabled": true,
+    "workflows_dir": "workflows/",
+    "workflow_files": [
+      "serial-workflow.js",
+      "parallel-workflow.js",
+      "conditional-workflow.js",
+      "loop-workflow.js",
+      "adversarial-workflow.js"
+    ],
+    "trajectory_evals": "evals/trajectory-evals.json"
   },
   "toolchain": {
     "scaffold": "plugins/frontend-team-toolkit/skill-engineering",
-    "eval_runner": "manual | skill-creator | darwin-skill"
+    "eval_runner": "manual | skill-creator | darwin-skill",
+    "workflow_runner": "claude-code-dynamic-workflows"
   }
 }

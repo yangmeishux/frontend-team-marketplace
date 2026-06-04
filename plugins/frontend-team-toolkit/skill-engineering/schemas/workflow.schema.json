@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Workflow Script Metadata",
+  "description": "Schema for dynamic workflow scripts in Skill packages",
+  "type": "object",
+  "properties": {
+    "workflow_name": {
+      "type": "string",
+      "description": "Unique workflow identifier"
+    },
+    "workflow_type": {
+      "type": "string",
+      "enum": ["serial", "parallel", "conditional", "loop", "adversarial", "tournament"],
+      "description": "Workflow orchestration pattern type"
+    },
+    "description": {
+      "type": "string",
+      "description": "What this workflow does"
+    },
+    "trigger_keywords": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Keywords that trigger this workflow"
+    },
+    "input_contract": {
+      "type": "object",
+      "properties": {
+        "required": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Required input parameters"
+        },
+        "optional": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Optional input parameters"
+        }
+      },
+      "required": ["required"]
+    },
+    "output_contract": {
+      "type": "object",
+      "properties": {
+        "required_outputs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Required outputs from workflow"
+        },
+        "status_field": {
+          "type": "string",
+          "description": "Field name for workflow status (e.g., 'status', 'combinedStatus')"
+        }
+      },
+      "required": ["required_outputs", "status_field"]
+    },
+    "agents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "model": { "type": "string", "enum": ["sonnet", "opus", "haiku"] },
+          "tools": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "worktree": { "type": "boolean" }
+        },
+        "required": ["name", "model"]
+      },
+      "description": "Agents spawned by this workflow"
+    },
+    "trajectory_eval_id": {
+      "type": "string",
+      "description": "ID of trajectory eval that validates this workflow"
+    },
+    "max_iterations": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 100,
+      "description": "For loop workflows, maximum iterations"
+    },
+    "stop_condition": {
+      "type": "string",
+      "description": "For loop workflows, description of stop condition"
+    },
+    "routing_conditions": {
+      "type": "object",
+      "description": "For conditional workflows, mapping of conditions to agents",
+      "additionalProperties": { "type": "string" }
+    },
+    "risk": {
+      "type": "string",
+      "enum": ["high", "medium", "low"],
+      "default": "medium",
+      "description": "Risk level for workflow execution"
+    }
+  },
+  "required": ["workflow_name", "workflow_type", "description", "input_contract", "output_contract"],
+  "additionalProperties": true
+}
