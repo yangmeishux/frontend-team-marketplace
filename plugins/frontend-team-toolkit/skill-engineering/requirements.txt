@@ -1,0 +1,13 @@
+# Skill Engineering CI Dependencies
+
+# Core (stdlib only for validation scripts)
+# No external dependencies required for validate-skill.py
+
+# Optional: LLM Judge support
+anthropic>=0.18.0  # For model_grader.py LLM Judge
+
+# Optional: YAML parsing (if needed)
+# pyyaml>=6.0
+
+# Optional: JSON Schema validation
+# jsonschema>=4.0

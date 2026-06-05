@@ -36,9 +36,21 @@ python3 plugins/frontend-team-toolkit/skill-engineering/bin/validate-skill.py \
 ```text
 skill-engineering/
 ├── README.md                 # 本文件
+├── requirements.txt          # Python 依赖（可选 LLM Judge）
 ├── bin/
 │   ├── new-skill.sh          # 从模板生成 Skill 目录
 │   └── validate-skill.py     # frontmatter + 工业级必备文件校验
+├── scripts/                  # CI 门禁自动化脚本（新增）
+│   ├── run_evals.py          # Eval runner（PR/Release/Scheduled 分层）
+│   ├── check_regression.py   # Regression 门禁检查
+│   ├── check_new_evals.py    # 新 Eval baseline 检查
+│   └── graders/              # Grader 自动化判定脚本
+│       ├── rule_grader.py    # 关键词/路径/禁用词检查
+│       ├── structure_grader.py # 章节/步骤/frontmatter 检查
+│       ├── trajectory_grader.py # Agent 调用顺序检查
+│       └── model_grader.py   # LLM Judge 语义判定
+├── config/                   # CI 配置（新增）
+│   └── risk-layer-config.json # risk 分层 + 门禁红线配置
 ├── schemas/                  # JSON Schema（evals、test-prompts、meta、issues、workflows）
 ├── templates/new-skill/      # 新 Skill 模板包（勿直接使用，请用脚本复制）
 │   ├── workflows/            # 动态编排脚本模板（新增）
@@ -47,7 +59,8 @@ skill-engineering/
 │   │   ├── parallel-workflow.js
 │   │   ├── conditional-workflow.js
 │   │   ├── loop-workflow.js
-│   │   └── adversarial-workflow.js
+│   │   ├── adversarial-workflow.js
+│   │   └── weekly-regression.js  # `/loop` 自动化回归（新增）
 │   └── evals/
 │       ├── evals.json        # 输出Eval模板
 │       └── trajectory-evals.json  # 过程Eval模板（新增）
@@ -118,9 +131,10 @@ Skill 现在支持 **Dynamic Workflows**，提供确定性执行能力：
 
 | 模块 | 职责 |
 |------|------|
-| **`skill-engineering/`**（本目录） | 创建骨架、结构校验、Schema、生命周期速查 |
+| **`skill-engineering/`**（本目录） | 创建骨架、结构校验、Schema、生命周期速查、CI 门禁自动化脚本 |
 | **`skills/`** | 实际 Skill 实现（随 Cursor 插件分发） |
 | **`skills-quality/`** | 已有 Skill 的质量台账、问题池、baseline / 回归计划、发布门禁 |
+| **`.github/workflows/eval-ci.yml`** | GitHub Actions CI 门禁 Workflow（PR/Release/定期回归） |
 
 推荐工作流：
 
@@ -131,6 +145,7 @@ new-skill.sh 创建
   → baseline 写入 results.tsv
   → 真实问题进入 skills-quality/skill-issues.jsonl
   → 按 skills-quality/release-checklist.md 发布
+  → CI 门禁自动回归（PR触发 → regression 挂必阻）
 ```
 
 ---
@@ -147,6 +162,88 @@ new-skill.sh 创建
 | `schemas/workflow.schema.json` | `workflows/*.js` 元数据结构（新增） |
 
 可在 CI 或本地脚本中用任意 JSON Schema 校验器引用上述文件。
+
+---
+
+## CI 门禁自动化（新增）
+
+CI 门禁实现 Eval 自动回归，改 Skill 后 regression 挂必阻合并。
+
+### 门禁三阶段
+
+| 阶段 | 时机 | 跑什么 | 目的 |
+|------|------|--------|------|
+| **PR 触发** | 提交 PR | risk=high + medium | 阻止 regression 退化 |
+| **发布前** | 合入 main | 全量 Eval | 全能力回归验证 |
+| **定期回归** | 每周/月 | spot check + 季度全量 | 发现长期退化 |
+
+### 门禁红线
+
+| 红线 | risk | 类型 | 阻止合并？ |
+|------|------|------|:----------:|
+| **regression 挂（high）** | high | regression | ✅ BLOCK |
+| **regression 挂（medium）** | medium | regression | ⚠️ WARN |
+| **新增 Eval 未 baseline** | - | - | ✅ BLOCK |
+| **改 Skill 未跑 baseline** | - | - | ✅ BLOCK |
+
+### CI 文件结构
+
+```text
+.github/workflows/eval-ci.yml  # GitHub Actions Workflow
+skill-engineering/
+  scripts/
+    run_evals.py               # Eval runner（PR/Release/Scheduled）
+    check_regression.py        # Regression 门禁检查
+    check_new_evals.py         # 新 Eval baseline 检查
+    graders/
+      rule_grader.py           # 关键词检查（完全自动）
+      structure_grader.py      # 结构检查（完全自动）
+      trajectory_grader.py     # 调用顺序检查（完全自动）
+      model_grader.py          # LLM Judge（半自动，防漂移）
+  config/
+    risk-layer-config.json     # risk 分层 + 门禁红线配置
+```
+
+### 运行 CI 门禁
+
+```bash
+# 手动触发（测试）
+gh workflow run eval-ci.yml -f skill=wechat-article-review -f mode=pr
+
+# 本地跑 Eval（模拟 CI）
+python3 plugins/frontend-team-toolkit/skill-engineering/scripts/run_evals.py \
+  --mode pr --skill wechat-article-review --output results.tsv
+
+# 检查 regression
+python3 plugins/frontend-team-toolkit/skill-engineering/scripts/check_regression.py \
+  --results results.tsv --risk high --block true
+
+# 检查新 Eval baseline
+python3 plugins/frontend-team-toolkit/skill-engineering/scripts/check_new_evals.py \
+  --skill wechat-article-review --results results.tsv
+```
+
+### `/loop` 自动化回归
+
+Claude Code `/loop` 命令支持定期自动化回归：
+
+```text
+/loop weekly 用 workflows/weekly-regression.js 回归 wechat-article-review Skill
+```
+
+Workflows 脚本：`templates/new-skill/workflows/weekly-regression.js`
+
+---
+
+## Grader 自动化速查表
+
+| grader | CI 自动化 | 数据来源 | 漂移风险 |
+|--------|:--------:|----------|:--------:|
+| **rule** | ✅ 完全 | 输出文本 | 无 |
+| **structure** | ✅ 完全 | 输出文本 | 无 |
+| **trajectory** | ✅ 完全 | Agent trace | 无 |
+| **model** | ⚠️ 半自动 | LLM Judge | 有（多次采样防漂移） |
+| **human** | ❌ 人工 | 人工审核 | 无 |
 
 ---
 

@@ -1,0 +1,70 @@
+{
+  "pr_mode": {
+    "risk_filter": ["high", "medium"],
+    "block_on_regression_high": true,
+    "block_on_regression_medium": false,
+    "description": "PR触发模式：跑high+medium，high regression挂必阻"
+  },
+  "release_mode": {
+    "risk_filter": ["high", "medium", "low"],
+    "block_on_any_regression": true,
+    "require_human_review": [],
+    "description": "发布前模式：跑全量，regression挂必阻"
+  },
+  "scheduled_mode": {
+    "weekly": {
+      "risk_filter": ["high"],
+      "spot_check_count": 3,
+      "description": "每周回归：high + 随机3条spot check"
+    },
+    "monthly": {
+      "risk_filter": ["high", "medium"],
+      "description": "每月回归：high + medium"
+    },
+    "quarterly": {
+      "risk_filter": ["high", "medium", "low"],
+      "description": "每季度回归：全量"
+    }
+  },
+  "grader_config": {
+    "rule": {
+      "auto": true,
+      "drift_risk": "none"
+    },
+    "structure": {
+      "auto": true,
+      "drift_risk": "none"
+    },
+    "trajectory": {
+      "auto": true,
+      "drift_risk": "none"
+    },
+    "model": {
+      "auto": "semi",
+      "sample_count": 3,
+      "drift_risk": "medium",
+      "spot_check_rate": 0.1
+    },
+    "human": {
+      "auto": false,
+      "trigger": "release"
+    }
+  },
+  "red_lines": {
+    "block_on": [
+      "regression_high_fail",
+      "new_eval_no_baseline",
+      "skill_change_no_baseline"
+    ],
+    "warn_on": [
+      "regression_medium_fail",
+      "capability_below_baseline",
+      "model_grader_fail"
+    ]
+  },
+  "notifications": {
+    "slack_channel": "",
+    "email_recipients": [],
+    "pr_comment_on_fail": true
+  }
+}

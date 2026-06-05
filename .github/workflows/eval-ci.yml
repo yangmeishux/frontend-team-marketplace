@@ -1,0 +1,208 @@
+name: Eval CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'plugins/frontend-team-toolkit/skills/**'
+      - 'plugins/frontend-team-toolkit/skill-engineering/**'
+  push:
+    branches: [main]
+    paths:
+      - 'plugins/frontend-team-toolkit/skills/**'
+  schedule:
+    - cron: '0 9 * * 1'  # 每周一 9:00
+    - cron: '0 9 1 * *'  # 每月 1 日 9:00
+    - cron: '0 9 1 1,4,7,10 *'  # 每季度首月 9:00
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      skill:
+        description: 'Skill name to evaluate'
+        required: true
+        default: 'wechat-article-review'
+        type: string
+      mode:
+        description: 'Run mode'
+        required: true
+        default: 'pr'
+        type: choice
+        options:
+          - pr
+          - release
+          - scheduled
+
+jobs:
+  eval-runner:
+    runs-on: ubuntu-latest
+    outputs:
+      regression_pass: ${{ steps.check_regression.outputs.pass }}
+      total_evals: ${{ steps.run_eval.outputs.total }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r plugins/frontend-team-toolkit/skill-engineering/requirements.txt || true
+          pip install anthropic || true
+
+      - name: Detect changed skills
+        id: detect_skills
+        if: github.event_name == 'pull_request'
+        run: |
+          # Find changed skill directories
+          changed_files=$(git diff --name-only origin/main...HEAD)
+          changed_skills=$(echo "$changed_files" | grep -oP 'skills/[^/]+' | sort -u | sed 's/skills\//')
+          echo "skills=${changed_skills}" >> $GITHUB_OUTPUT
+          echo "Detected changed skills: ${changed_skills}"
+
+      - name: Run Eval (PR mode)
+        id: run_eval
+        if: github.event_name == 'pull_request'
+        run: |
+          skill="${{ inputs.skill || steps.detect_skills.outputs.skills || 'wechat-article-review' }}"
+          python plugins/frontend-team-toolkit/skill-engineering/scripts/run_evals.py \
+            --mode pr \
+            --skill "$skill" \
+            --output results.tsv
+          echo "total=$(wc -l < results.tsv)" >> $GITHUB_OUTPUT
+
+      - name: Run Eval (Release mode)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          # Run all skills on main push
+          for skill in $(ls plugins/frontend-team-toolkit/skills/); do
+            python plugins/frontend-team-toolkit/skill-engineering/scripts/run_evals.py \
+              --mode release \
+              --skill "$skill" \
+              --output "results-${skill}.tsv"
+          done
+
+      - name: Run Eval (Scheduled mode)
+        if: github.event_name == 'schedule'
+        run: |
+          # Determine frequency based on cron
+          if [[ "${{ github.event.schedule }}" == "0 9 1 1,4,7,10 *" ]]; then
+            frequency="quarterly"
+          elif [[ "${{ github.event.schedule }}" == "0 9 1 * *" ]]; then
+            frequency="monthly"
+          else
+            frequency="weekly"
+          fi
+
+          for skill in $(ls plugins/frontend-team-toolkit/skills/); do
+            python plugins/frontend-team-toolkit/skill-engineering/scripts/run_evals.py \
+              --mode scheduled \
+              --frequency "$frequency" \
+              --skill "$skill" \
+              --output "results-${skill}.tsv"
+          done
+
+      - name: Run Eval (Manual dispatch)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          python plugins/frontend-team-toolkit/skill-engineering/scripts/run_evals.py \
+            --mode "${{ inputs.mode }}" \
+            --skill "${{ inputs.skill }}" \
+            --output results.tsv
+
+      - name: Check regression (high risk)
+        id: check_regression
+        run: |
+          python plugins/frontend-team-toolkit/skill-engineering/scripts/check_regression.py \
+            --results results.tsv \
+            --risk high \
+            --block true
+          echo "pass=true" >> $GITHUB_OUTPUT
+        continue-on-error: false
+
+      - name: Check regression (medium risk)
+        run: |
+          python plugins/frontend-team-toolkit/skill-engineering/scripts/check_regression.py \
+            --results results.tsv \
+            --risk medium \
+            --block false
+        continue-on-error: true
+
+      - name: Check new evals baseline
+        run: |
+          skill="${{ inputs.skill || 'wechat-article-review' }}"
+          python plugins/frontend-team-toolkit/skill-engineering/scripts/check_new_evals.py \
+            --skill "$skill" \
+            --results results.tsv \
+            --block true
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: |
+            results.tsv
+            results-*.tsv
+
+      - name: Generate Summary
+        if: always()
+        run: |
+          echo "## Eval CI Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f results.tsv ]; then
+            cat results.tsv >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Comment on PR (if failed)
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `❌ **Eval CI Failed**
+
+            **Regression Eval 挂了或新增 Eval 未 baseline。**
+
+            请查看 [CI Results](/${{ github.repository }}/actions/runs/${{ github.run_id }}) 详情。
+
+            修复后请重新提交。`
+            })
+
+      - name: Notify Slack on failure
+        if: failure() && env.SLACK_WEBHOOK_URL != ''
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+            --data '{"text":"❌ Eval CI Failed: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"}' \
+            $SLACK_WEBHOOK_URL
+
+  # Human review gate for release
+  human-review:
+    runs-on: ubuntu-latest
+    needs: eval-runner
+    if: github.event_name == 'release'
+
+    steps:
+      - name: Trigger human review
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Human Review Required for Release',
+              body: `发布前需要人工审核以下 risk=high Eval：
+
+            - 请检查 model grader 结果（如有）
+            - 请确认 capability Eval 无退化
+
+            人工复核后，回复 "approved" 关闭此 Issue。`,
+              labels: ['human-review', 'release-blocking']
+            })
