@@ -30,6 +30,10 @@ from structure_grader import structure_grader
 from trajectory_grader import trajectory_grader
 from model_grader import model_grader
 
+# Add skill_runner
+sys.path.insert(0, str(Path(__file__).parent))
+from skill_runner import run_skill_from_eval
+
 
 def load_config(config_path: Path) -> dict[str, Any]:
     """Load risk layer configuration."""
@@ -158,12 +162,11 @@ def run_evals(mode: str, skill: str, skill_base_path: Path, frequency: str | Non
         print(f"Unknown mode: {mode}", file=sys.stderr)
         sys.exit(1)
 
-    # Run each eval (placeholder - actual implementation needs LLM runner)
+    # Run each eval using skill_runner
     results = []
     for eval_dict in filtered:
-        # Placeholder: would call actual skill runner here
-        output = ""  # TODO: actual output from skill execution
-        agent_trace = []  # TODO: actual agent trace
+        # Execute skill and get output + agent_trace
+        output, agent_trace = run_skill_from_eval(eval_dict, skill_path)
 
         result = run_single_eval(eval_dict, output, agent_trace)
         results.append(result)
