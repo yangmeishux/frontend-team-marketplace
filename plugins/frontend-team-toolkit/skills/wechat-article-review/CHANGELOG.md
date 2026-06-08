@@ -2,6 +2,34 @@
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-06-05
+
+### Added
+
+- Eval cases 007-011（实战篇案例）
+  - 007: 空洞开头 + 缺干货（regression, high）
+  - 008: 承诺未兑现（regression, high）
+  - 009: 真实文章路径（capability, medium）
+  - 010: 8.6 分边界稿（regression, high）
+  - 011: 8.9 分边界稿（capability, medium）
+
+### Changed
+
+- Rubric：新增「空洞开头识别」节（开头 3 秒判定规则）
+- Workflow：步骤 4 增加「开头 3 秒检查」
+- Output-contract：承诺扣分表模板完善（六列格式）
+
+### Fixed
+
+- Eval 007 regression 通过（开头问题识别已补）
+- Eval 008 regression 通过（承诺扣分表模板已补）
+
+### Verification
+
+- Baseline: 2026-06-05（007-011）
+- Regression: 007/008/010 通过
+- Capability: 009 pending, 010/011 baseline done
+
 ## [0.1.3] - 2026-05-30
 
 ### Changed

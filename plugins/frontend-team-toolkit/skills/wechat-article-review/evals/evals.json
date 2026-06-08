@@ -114,6 +114,100 @@
       "source": "real_usage",
       "artifact": "articles/skill-upgrade-sop-wechat.md",
       "baseline_score": 9.3
+    },
+    {
+      "id": "wechat-article-review-007",
+      "name": "hollow-opening-no-substance",
+      "type": "regression",
+      "prompt": "请给下面这篇公众号干货初稿打分，受众是前端开发者。\n\n# 如何写出高质量代码\n\n代码很重要。每个人都要写好代码。本文分享一些技巧。\n\n首先你要有好的习惯。然后你要多练习。最后你就写好了。\n\n总之代码质量决定项目成败，欢迎关注。",
+      "expected": [
+        "结论必须为 ❌ 不通过且综合评分低于 9.0",
+        "必须指出「开头 3 秒不抓人」问题（空洞、无痛点）",
+        "必须指出「干货不足」问题（无具体技巧/案例/数据）",
+        "必须给出 P0/P1/P2 修改清单"
+      ],
+      "must_not": [
+        "不得给出 ≥9.0 通过结论",
+        "不得只说「整体不错」无位置"
+      ],
+      "grader": "rule+human",
+      "risk": "high",
+      "source": "synthetic_weak_draft"
+    },
+    {
+      "id": "wechat-article-review-008",
+      "name": "unfulfilled-promise-checklist",
+      "type": "regression",
+      "prompt": "打分：\n\n# 完整 Skill 评审流程\n\n下文我将给出 5 步完整评审清单和评分模板。\n\n## 为什么评审重要\n评审能发现问题。\n\n## 总结\n欢迎关注，下一篇再讲清单。",
+      "expected": [
+        "必须在主要问题中标记「承诺未兑现」（promised 5 步/模板未出现）",
+        "综合评分必须低于 9.0",
+        "必须给出承诺扣分表（承诺句 → 位置 → 缺口 → 扣分）"
+      ],
+      "must_not": [
+        "不得忽略「下文将给出」类空头承诺",
+        "不得仍给出通过结论"
+      ],
+      "grader": "rule+human",
+      "risk": "high",
+      "source": "promise_consistency"
+    },
+    {
+      "id": "wechat-article-review-009",
+      "name": "real-article-path-eval",
+      "type": "capability",
+      "prompt": "请评审 articles/skill-catalog-design.md（干货，受众 AI Skill 作者），按 9 分线打分，看能否发公众号。",
+      "expected": [
+        "必须 Read 文件后评分",
+        "必须输出五维得分表 + 加权总分",
+        "若 <9.0 必须给出 P0/P1 修改清单与复评目标",
+        "若 ≥9.0 必须指出至少 1 个亮点"
+      ],
+      "must_not": [
+        "不得未读文件就给评分",
+        "不得对明显缺 CTA 的稿给 ≥9.0"
+      ],
+      "grader": "rule+human",
+      "risk": "medium",
+      "source": "real_usage",
+      "artifact": "articles/skill-catalog-design.md",
+      "baseline_score": null
+    },
+    {
+      "id": "wechat-article-review-010",
+      "name": "borderline-86-score",
+      "type": "regression",
+      "prompt": "请评审这篇公众号干货（受众：技术管理者），按 9 分线打分。\n\n# 三个信号说明你的团队需要 Skill 工程\n\n**结论先说**：如果你的团队改 Skill 只靠「感觉更好」，你需要工程化。\n\n## 信号 1：没有 Eval\n改完不知道 regression 退没退步。\n\n## 信号 2：没有 baseline\n团队不知道 v0.3 比 v0.2 好在哪。\n\n## 信号 3：没有 CHANGELOG\n谁改坏了不知道。\n\n**CTA**：回复「工程」获取模板。",
+      "expected": [
+        "必须输出五维得分表与加权总分",
+        "若评分在 8.5-8.9 区间，必须判定 ❌ 不通过",
+        "必须说明「差多少」并给出复评目标"
+      ],
+      "must_not": [
+        "不得对 8.5-8.9 分给出通过结论",
+        "不得省略修改建议"
+      ],
+      "grader": "rule+human",
+      "risk": "high",
+      "source": "synthetic_borderline",
+      "baseline_score": 8.6
+    },
+    {
+      "id": "wechat-article-review-011",
+      "name": "borderline-89-warn",
+      "type": "capability",
+      "prompt": "请评审（受众：公众号运营者）。\n\n# 5 步让你的 Skill 从提示词变工程资产\n\n**结论先说**：Eval + baseline + CHANGELOG = 可迭代的 Skill。\n\n## Step 1：写第一条 Eval\n选择高频失败场景。\n\n## Step 2：跑 baseline\n不改 Skill，跑当前版本。\n\n## Step 3：记录 results.tsv\n每次改动写一行。\n\n## Step 4：写 CHANGELOG\n改什么、为什么、谁改的。\n\n## Step 5：定期回归\n每周跑 regression Eval。\n\n**CTA**：收藏对照目录树。",
+      "expected": [
+        "若评分 8.5-8.9，必须标注「接近未达标」",
+        "必须给出针对性修改建议（补案例/数据）"
+      ],
+      "must_not": [
+        "不得对 8.9 分给出通过结论（9 分是硬线）"
+      ],
+      "grader": "rule+human",
+      "risk": "medium",
+      "source": "synthetic_near_pass",
+      "baseline_score": 8.9
     }
   ]
 }
