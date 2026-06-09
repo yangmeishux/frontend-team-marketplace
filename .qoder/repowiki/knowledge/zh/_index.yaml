@@ -2,7 +2,7 @@
 schema_version: 1
 locale: zh-CN
 branch: main
-exported_at: "2026-06-09T09:13:11Z"
+exported_at: "2026-06-09T09:38:00Z"
 modules:
     "":
         dir_name: 前端团队 Cursor 插件市场与工程化规范
