@@ -33,7 +33,7 @@ metadata:
 1. **识别任务类型** — 根据用户描述，判断属于以下 8 种前端任务类型之一（或组合）：
 
    | 类型代号 | 任务类型 | 典型触发词 |
-   |---------|---------|-----------|
+   |---------|---------|------------|
    | `PAGE` | 页面功能开发 | 新增页面、新增功能、列表页、详情页 |
    | `UI` | UI 还原 | 设计稿、UI稿、Figma、还原页面、布局 |
    | `API` | 接口对接 | 调用接口、MCP、Yapi、接口文档 |
@@ -52,6 +52,8 @@ metadata:
 5. **自检** — 对照 output-contract 检查生成的提示词是否完整
 
 6. **交付** — 输出结构化提示词 + 使用说明
+
+7. **反馈闭环（可选）** — 交付后追问用户：「这条提示词效果如何？有什么需要改进的？」，然后将反馈追加到 `skill-issues.jsonl` 或 `LEARNINGS.md`
 
 ## Input Contract（按任务类型）
 
@@ -164,7 +166,8 @@ metadata:
 - 结构化 eval：`evals/evals.json`
 - 快速实测：`test-prompts.json`
 - 结果记录：`results.tsv`
-- 问题池：复制 `skill-issues.jsonl.example` → `skill-issues.jsonl`
+- 问题池：`skill-issues.jsonl`（追加新问题）
+- 经验沉淀：`LEARNINGS.md`（追加使用心得）
 
 ## Bundled Resources
 
@@ -173,3 +176,24 @@ metadata:
 | `references/output-contract.md` | 每次执行前 |
 | `references/prompt-templates.md` | 生成提示词时 |
 | `evals/evals.json` | 验证输出质量时 |
+
+## 反馈闭环规则（步骤 7）
+
+每次完成提示词交付后，执行以下闭环：
+
+1. **追问效果**：主动询问用户「这条提示词是否满足需求？有没有需要调整的地方？」
+
+2. **记录问题**：若用户反馈有不足，追加一行到 `skill-issues.jsonl`：
+   ```json
+   {"date":"YYYY-MM-DD","skill":"frontend-dev-prompt-craft","task_type":"类型代号","symptom":"问题描述","expected":"期望行为","severity":"low|medium|high","source":"user_feedback","converted_to_eval":false,"eval_id":null,"status":"open"}
+   ```
+
+3. **沉淀经验**：若有值得复用的洞察，追加到 `LEARNINGS.md`：
+   ```markdown
+   ## [日期] [任务类型] 简短标题
+   **场景**: ...
+   **反馈**: ...
+   **改进点**: ...
+   ```
+
+4. **同步更新**：当 `LEARNINGS.md` 积累 3 条以上同类改进点时，建议用户将这些经验合并回 `SKILL.md` 或 `references/prompt-templates.md`。
