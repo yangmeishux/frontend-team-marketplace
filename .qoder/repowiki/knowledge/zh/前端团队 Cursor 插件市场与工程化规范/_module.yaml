@@ -1,0 +1,15 @@
+schema_version: 1
+module_path: ""
+title: 前端团队 Cursor 插件市场与工程化规范
+scope:
+    - .claude/
+    - .cursor-plugin/
+    - .github/
+    - scripts/
+    - .gitignore
+    - CURSOR_TEAM_MARKETPLACE_PLUGIN_HANDBOOK.md
+    - README.md
+    - WECHAT_TEAM_MARKETPLACE_PLUGIN_GUIDE.md
+source_files: []
+depends_on: []
+related_to: []

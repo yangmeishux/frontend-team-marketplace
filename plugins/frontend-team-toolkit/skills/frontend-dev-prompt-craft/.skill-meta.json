@@ -1,0 +1,24 @@
+{
+  "skill_name": "frontend-dev-prompt-craft",
+  "version": "0.1.0",
+  "maturity": "draft",
+  "created_at": "2026-06-09T03:46:14Z",
+  "updated_at": "2026-06-09T03:46:14Z",
+  "baseline": {
+    "eval_run_at": "2026-06-09",
+    "regression_pass_rate": "3/3 (100%)",
+    "capability_pass_rate": "3/3 (100%)",
+    "trajectory_eval_pass_rate": null,
+    "test_prompts_pass_rate": "8/8 (100%)",
+    "notes": "Baseline run complete. All 14/14 cases PASS. See results.tsv for details."
+  },
+  "workflows": {
+    "enabled": false,
+    "reason": "prompt engineering skill — no dynamic execution needed"
+  },
+  "toolchain": {
+    "scaffold": "plugins/frontend-team-toolkit/skill-engineering",
+    "eval_runner": "manual | skill-creator | darwin-skill",
+    "workflow_runner": "claude-code-dynamic-workflows"
+  }
+}

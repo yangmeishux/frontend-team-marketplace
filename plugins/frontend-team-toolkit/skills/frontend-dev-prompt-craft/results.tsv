@@ -1,0 +1,15 @@
+eval_id	pass	date	version	eval_mode	severity	reviewer	notes
+tp-1	PASS	2026-06-09	0.1.0	baseline	-	auto	PAGE: 识别+追问路由/接口/UI稿
+tp-2	PASS	2026-06-09	0.1.0	baseline	-	auto	UI: 识别+追问设计稿/组件库/交互
+tp-3	PASS	2026-06-09	0.1.0	baseline	-	auto	REFACTOR: 识别+追问分支/构建/例外项
+tp-4	PASS	2026-06-09	0.1.0	baseline	-	auto	DEBUG: 识别+追问路由/子应用名/登录体系
+tp-5	PASS	2026-06-09	0.1.0	baseline	-	auto	UNKNOWN: 无关键词→追问任务类型，不生成空泛
+tp-6	PASS	2026-06-09	0.1.0	baseline	-	auto	PRD: 识别+追问PRD路径/现有文档/关注板块
+tp-7	PASS	2026-06-09	0.1.0	baseline	-	auto	API: 识别+追问传参说明/返回处理
+tp-8	PASS	2026-06-09	0.1.0	baseline	-	auto	MIGRATE: 识别+追问组件名/目标路径/依赖清单
+eval-001	PASS	2026-06-09	0.1.0	baseline	high	auto	page-feature-happy-path: 8/8 expected ✅
+eval-002	PASS	2026-06-09	0.1.0	baseline	high	auto	missing-info-must-ask: 5/5 expected ✅
+eval-003	PASS	2026-06-09	0.1.0	baseline	high	auto	refactor-batch-domain: 7/7 expected ✅
+eval-004	PASS	2026-06-09	0.1.0	baseline	high	auto	debug-must-include-reproduction: 6/6 expected ✅
+eval-005	PASS	2026-06-09	0.1.0	baseline	medium	auto	combo-ui-plus-api: 6/6 expected ✅
+eval-006	PASS	2026-06-09	0.1.0	baseline	medium	auto	prd-incremental-iteration: 7/7 expected ✅

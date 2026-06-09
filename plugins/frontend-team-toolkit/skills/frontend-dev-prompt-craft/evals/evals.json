@@ -1,0 +1,122 @@
+{
+  "skill_name": "frontend-dev-prompt-craft",
+  "evals": [
+    {
+      "id": "frontend-dev-prompt-craft-001",
+      "name": "page-feature-happy-path",
+      "type": "regression",
+      "prompt": "帮我写一个给AI用的提示词。需求是：在当前项目的 /#/weChat_export 路由下新增一个企微数据导出页面，上部分是筛选区域（企微员工ID多选、起止时间），下部分是导出文件列表，支持分页，导出是异步的需要轮询状态。接口用Yapi的。",
+      "expected": [
+        "必须识别为 PAGE 类型",
+        "生成的提示词必须包含路由路径 /#/weChat_export",
+        "必须包含筛选区域的具体字段描述",
+        "必须包含轮询逻辑的描述（间隔时间、停止条件）",
+        "必须包含至少一条验收标准",
+        "提示词可直接复制给AI编码工具使用"
+      ],
+      "must_not": [
+        "不得生成空泛的「请帮我开发一个页面」",
+        "不得遗漏路由路径信息"
+      ],
+      "grader": "rule",
+      "risk": "high",
+      "source": "real_usage"
+    },
+    {
+      "id": "frontend-dev-prompt-craft-002",
+      "name": "missing-info-must-ask",
+      "type": "regression",
+      "prompt": "帮我写个开发提示词",
+      "expected": [
+        "必须追问用户具体是什么类型的前端任务",
+        "必须列出需要用户提供的信息（如任务类型、页面路径、功能描述等）",
+        "不得在信息不足时直接生成完整提示词"
+      ],
+      "must_not": [
+        "不得直接生成空泛的提示词模板",
+        "不得编造文件路径或接口地址"
+      ],
+      "grader": "rule",
+      "risk": "high",
+      "source": "input_contract"
+    },
+    {
+      "id": "frontend-dev-prompt-craft-003",
+      "name": "refactor-batch-domain",
+      "type": "capability",
+      "prompt": "我要把18个前端项目的域名从 wyins.net.cn 改成 winbaoxian.cn，wyins.net 改成 winbaoxian.com，还要加 cppoc- 前缀。CDN和OSS不改。帮我写个提示词让AI帮我批量处理。",
+      "expected": [
+        "必须识别为 REFACTOR 类型",
+        "生成的提示词必须包含完整的域名映射规则（至少2条）",
+        "必须明确 CDN/OSS 例外",
+        "必须包含多项目列表或占位",
+        "必须包含分支和提交策略"
+      ],
+      "must_not": [
+        "不得遗漏任何一条域名替换规则",
+        "不得忽略 CDN/OSS 例外说明"
+      ],
+      "grader": "rule",
+      "risk": "high",
+      "source": "real_usage"
+    },
+    {
+      "id": "frontend-dev-prompt-craft-004",
+      "name": "debug-must-include-reproduction",
+      "type": "regression",
+      "prompt": "子应用页面能看到但是一直反复刷新，帮我写个提示词",
+      "expected": [
+        "必须识别为 DEBUG 类型",
+        "必须追问：页面路由、子应用名称、登录体系说明",
+        "生成的提示词必须包含预期行为和实际行为的对比",
+        "必须包含复现信息相关字段（URL、日志）"
+      ],
+      "must_not": [
+        "不得在缺少复现信息的情况下直接生成提示词",
+        "不得编造子应用名称"
+      ],
+      "grader": "rule",
+      "risk": "high",
+      "source": "real_usage"
+    },
+    {
+      "id": "frontend-dev-prompt-craft-005",
+      "name": "combo-ui-plus-api",
+      "type": "capability",
+      "prompt": "帮我写提示词，需要做一个产品选择浮层，用vant组件库，底部有确认按钮。浮层里的数据从接口获取，接口是 /api/products/list。选完之后要更新页面的产品列表。",
+      "expected": [
+        "必须识别为 UI + API 组合类型",
+        "提示词中必须包含 UI 部分（浮层布局、组件库、交互）",
+        "提示词中必须包含 API 部分（接口地址、选后更新逻辑）",
+        "必须包含验收标准"
+      ],
+      "must_not": [
+        "不得只处理 UI 而忽略 API 对接部分",
+        "不得遗漏 vant 组件库约束"
+      ],
+      "grader": "rule+human",
+      "risk": "medium",
+      "source": "real_usage"
+    },
+    {
+      "id": "frontend-dev-prompt-craft-006",
+      "name": "prd-incremental-iteration",
+      "type": "capability",
+      "prompt": "我的PRD文档更新了，之前已经有开发文档和部分代码了。我不想全量重新生成代码，想在现有基础上增量开发。帮我写个提示词处理这个需求迭代。PRD在 /docs/prd-v2.md，之前的开发文档在 /docs/dev-doc-v1.md",
+      "expected": [
+        "必须识别为 PRD 类型",
+        "必须包含增量迭代策略（非全量重写）",
+        "必须引用两个文档路径",
+        "提示词中必须要求AI对比差异而非从头开始",
+        "必须包含变更识别和增量开发的步骤"
+      ],
+      "must_not": [
+        "不得建议用户全量重新生成",
+        "不得遗漏已有的开发文档路径"
+      ],
+      "grader": "rule+human",
+      "risk": "medium",
+      "source": "real_usage"
+    }
+  ]
+}

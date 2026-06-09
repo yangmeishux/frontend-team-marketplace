@@ -1,0 +1,22 @@
+# 知识卡导出索引文件
+schema_version: 1
+locale: zh-CN
+branch: main
+exported_at: "2026-06-09T04:11:41Z"
+modules:
+    "":
+        dir_name: 前端团队 Cursor 插件市场与工程化规范
+        title: 前端团队 Cursor 插件市场与工程化规范
+        scope:
+            - .claude/
+            - .cursor-plugin/
+            - .github/
+            - scripts/
+            - .gitignore
+            - CURSOR_TEAM_MARKETPLACE_PLUGIN_HANDBOOK.md
+            - README.md
+            - WECHAT_TEAM_MARKETPLACE_PLUGIN_GUIDE.md
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
